@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    height: 40px;
+    margin: 10px;
+    background: transparent;
+}
+
+.logo-name {
+    min-width: 100%;
+    font-size: 13px;
+
+}
