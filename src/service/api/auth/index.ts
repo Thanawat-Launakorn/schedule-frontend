@@ -1,6 +1,5 @@
 import axios, { throwResponse } from "../../../config/axios/axios.config";
 import { ISignin } from "./auth-interface";
-import projectConfig from "../../../config/project.config";
 import endpoints from "../api.endpoints";
 
 const statusSuccess = [200, 201];

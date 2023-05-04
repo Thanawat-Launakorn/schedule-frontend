@@ -14,7 +14,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   let token = getToken();
-  token = "dfe";
+
   // console.log(token);
   // console.log(isPublic);
 
