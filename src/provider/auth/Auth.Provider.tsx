@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
+import authAPI from "../../service/api/auth";
 type AuthProviderProps = {
   children: React.ReactNode;
 };
@@ -13,7 +14,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return localStorage.getItem("token");
   };
 
-  let token = getToken();
+  const token = getToken();
 
   // console.log(token);
   // console.log(isPublic);

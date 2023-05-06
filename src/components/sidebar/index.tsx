@@ -1,18 +1,25 @@
 export type SiderTheme = "light" | "dark";
 import type { MenuProps } from "antd";
 import { Row, Col, Space, Avatar, Dropdown, Typography } from "antd";
+import calendar from "../../assets/images/calendar.png";
 import { defaultLayout } from "../../routes/default.router";
 type MenuItem = Required<MenuProps>["items"][number];
 
 import {
   DashboardOutlined,
+  DashboardFilled,
   UserOutlined,
-  MoreOutlined,
+  UpSquareFilled,
+  CaretDownOutlined,
   CalendarOutlined,
+  CalendarFilled,
   SettingOutlined,
+  SettingFilled,
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { IItem } from "./sidebar-interface";
 
 const { Sider } = Layout;
 type Props = {
@@ -32,42 +39,31 @@ const getItem = (
 };
 export default function AppSidebar({ trigger, collapsed, setTheme }: Props) {
   const navigate = useNavigate();
-  const signout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
+
   const sidebarMenu: Array<MenuItem> = [
     getItem("Dashboard", 1, <DashboardOutlined />),
     getItem("User", 2, <UserOutlined />),
     getItem("Calendar", 3, <CalendarOutlined />),
     getItem("Setting", 4, <SettingOutlined />),
   ];
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <Typography.Text onClick={(id) => navigate(`/profile/${id}`)}>
-          Profile
-        </Typography.Text>
-      ),
-    },
-    {
-      key: "2",
-      className: "dropdown-logout",
-      label: <Typography.Text onClick={signout}>Logout</Typography.Text>,
-    },
-  ];
 
   const handleMenu: MenuProps["onClick"] = (e) => {
     switch (e.key) {
       case e.key:
         defaultLayout.children.find((routes) => {
-          if (routes.key === Number(e.key)) navigate(`${routes.path}`);
+          if (routes.key === Number(e.key)) {
+            navigate(`${routes.path}`);
+          }
         });
+
         break;
       default:
         alert("page not found");
     }
+  };
+
+  const handleMouseEnter: MenuProps["onClick"] = (e) => {
+    console.log(e.key);
   };
   return (
     <Sider
@@ -78,39 +74,26 @@ export default function AppSidebar({ trigger, collapsed, setTheme }: Props) {
       breakpoint="lg"
       collapsedWidth="75"
       theme={setTheme}
+      style={{
+        overflow: "auto",
+        height: "100vh",
+        position: "fixed",
+        left: 0,
+        top: 0,
+        bottom: 0,
+      }}
+      className="!transition-all !ease-linear !delay-75"
     >
-      <Row className="logo">
-        <Space align="center" size="middle">
-          <Col>
-            <Avatar
-              src={""}
-              alt="image-profile"
-              size="default"
-              style={{
-                marginLeft: 15,
-              }}
-            />
-          </Col>
-          <Col
-            span={24}
-            style={collapsed ? { display: "none" } : {}}
-            className="logo-name"
-          >
-            Thanawat Launakorn
-          </Col>
-          <Col
-            style={collapsed ? { display: "none" } : {}}
-            className="logo-action"
-          >
-            <Dropdown
-              menu={{ items }}
-              placement="bottomRight"
-              trigger={["click"]}
-            >
-              <MoreOutlined style={{ fontSize: 15, cursor: "pointer" }} />
-            </Dropdown>
-          </Col>
-        </Space>
+      <Row
+        className="logo center"
+        align="middle"
+        style={collapsed ? { opacity: 0 } : {}}
+      >
+        <img
+          src={calendar}
+          alt="image-logo"
+          className="object-fill h-14 w-14 "
+        />
       </Row>
       <Menu
         theme={setTheme}
@@ -118,6 +101,8 @@ export default function AppSidebar({ trigger, collapsed, setTheme }: Props) {
         defaultSelectedKeys={["1"]}
         items={sidebarMenu}
         onClick={handleMenu}
+        onMouseEnter={() => handleMouseEnter}
+        style={{ flex: 1, padding: "0px 5px" }}
       />
     </Sider>
   );

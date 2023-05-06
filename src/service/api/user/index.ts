@@ -5,12 +5,12 @@ const statusSuccess = [200, 201];
 
 export async function getAllUser() {
   const res = await axios.get(`${endpoints.user.getAll}`);
-  !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
+  return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
 export async function getOneUser(id?: number) {
   const res = await axios.get(`${endpoints.user.getOne}/${id}`);
-  !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
+  return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
 export async function createUser(params?: IUser) {

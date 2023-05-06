@@ -1,12 +1,16 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
 import projectConfig from "../project.config";
+const getToken = () => {
+  return localStorage.getItem("token");
+};
 
+const token = getToken();
 const instance = axios.create({
   baseURL: projectConfig.baseURL,
   headers: {
     Accept: "application/json",
-    Authorization: `Bearer `,
+    Authorization: `Bearer ${token}`,
   },
   validateStatus: (_) => true,
 });

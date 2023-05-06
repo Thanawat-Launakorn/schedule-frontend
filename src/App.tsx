@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { RouterProvider, useRoutes, HashRouter } from "react-router-dom";
+import { ConfigProvider } from "antd";
+import { useRoutes, HashRouter } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./provider/auth/Auth.Provider";
 import routes from "./routes/routes";
-
+import { StyleProvider } from "@ant-design/cssinjs";
 const AppRoute = () => {
   const appRoute = useRoutes(routes);
   return appRoute;
@@ -12,9 +12,20 @@ const AppRoute = () => {
 function App() {
   return (
     <HashRouter>
-      <AuthProvider>
-        <AppRoute />
-      </AuthProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#2F58CD",
+            colorBgBase: "",
+          },
+        }}
+      >
+        <StyleProvider hashPriority="high">
+          <AuthProvider>
+            <AppRoute />
+          </AuthProvider>
+        </StyleProvider>
+      </ConfigProvider>
     </HashRouter>
   );
 }

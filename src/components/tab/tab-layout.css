@@ -1,0 +1,89 @@
+.card-search {
+    padding: 20px;
+    margin: 20px 0px;
+    width: 100%;
+    min-height: 150px;
+    background-color: #F7F7F7;
+  }
+  .bnt-search {
+    background-color: #001529;
+    color: #ffffff;
+  }
+  .bnt-search:hover{
+    background-color: #001529f0;
+  }
+  .bnt-search:active,
+  .bnt-search:not(:disabled):active,
+  .bnt-search:hover {
+    color: #991222;
+    border-color: #001529 !important;
+  }
+  .bnt-search:focus-visible{
+    outline: 4px solid #001a33 !important;
+  }
+  .ant-col .ant-form-item-label {
+      padding: 0px;
+  }
+  
+  
+  .ant-tabs-nav {
+    margin-top: 0px;
+  }
+  
+  .ant-tabs-tab.ant-tabs-tab-active {
+    background-color: #be202d27 !important;
+    min-width: 160px;
+    border: none !important;
+    border-radius: 4px !important;
+    margin-bottom: 0px !important;
+    margin-right: 10px !important;
+  }
+  .ant-tabs .ant-tabs-tab{
+  background: #F7F7F7;
+  }
+  .ant-tabs .ant-tabs-tab:hover{
+  background: #be202d27;
+  }
+  .ant-tabs-top>.ant-tabs-nav::before{
+    border-bottom:none;
+  }
+  .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #be202e !important;
+  }
+  .ant-tabs .ant-tabs-tab+.ant-tabs-tab {
+    margin: 0px 0 0 5px;
+  }
+  .ant-tabs .ant-tabs-tab:hover {
+    color: rgb(87, 85, 85) !important;
+  }
+  .ant-tabs-nav {
+    margin: 0px !important;
+  }
+  
+  .ant-tabs-tab {
+    margin-right: 10px !important;
+    min-width: 160px;
+    border: none !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+    padding-left: 45px !important;
+  }
+  
+  .ant-tabs-top>.ant-tabs-nav::before,
+  .ant-tabs-bottom>.ant-tabs-nav::before,
+  .ant-tabs-top>div>.ant-tabs-nav::before,
+  .ant-tabs-bottom>div>.ant-tabs-nav::before {
+    border: none;
+  }
+  
+  .ant-tabs-tab{
+    margin-bottom: 0px !important;
+    padding: 14px !important;
+  }
+  .ant-tabs-tab > div {
+    width: 100%;
+    text-align: center;
+  }
+  /* .ant-tabs .ant-tabs-ink-bar{
+      background: transparent;
+  } */

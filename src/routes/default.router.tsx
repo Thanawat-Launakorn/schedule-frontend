@@ -1,5 +1,5 @@
 import type { RouteObject } from "react-router-dom";
-import Calendar from "../view/calendar";
+import AppCalendar from "../view/calendar";
 import Dashboard from "../view/dashboard";
 import Error404 from "../view/error/error404";
 import Error500 from "../view/error/error500";
@@ -10,7 +10,6 @@ import EditUser from "../view/listuser/edit";
 
 import Signin from "../view/login";
 import NonLayout from "../view/nolayout";
-import Profile from "../view/profile";
 import Setting from "../view/setting";
 import Signout from "../view/signout";
 export const dashboard = [
@@ -21,8 +20,10 @@ export const user = [
   { path: "/listuser/create", element: <CreateUser /> },
   { path: "/listuser/edit/:id", element: <EditUser /> },
 ];
-export const profile = [{ path: "/profile/:id", element: <Profile />, key: 5 }];
-export const calendar = [{ path: "/calendar", element: <Calendar />, key: 3 }];
+
+export const calendar = [
+  { path: "/calendar", element: <AppCalendar />, key: 3 },
+];
 export const setting = [{ path: "/setting", element: <Setting />, key: 4 }];
 export const auth = [{ path: "/signout", element: <Signout /> }];
 
@@ -43,5 +44,5 @@ export const routerDefault: Array<RouteObject> = [
 export const defaultLayout = {
   path: "/",
   element: <DefaultLayout />,
-  children: [...dashboard, ...user, ...profile, ...calendar, ...setting],
+  children: [...dashboard, ...user, ...calendar, ...setting],
 };
