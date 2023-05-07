@@ -19,7 +19,6 @@ import {
   CaretDownOutlined,
   PlusOutlined,
   CloseCircleOutlined,
-  ExclamationCircleFilled,
 } from "@ant-design/icons";
 import { CSSProperties } from "@ant-design/cssinjs/lib/hooks/useStyleRegister";
 import authAPI from "../../service/api/auth";
@@ -61,13 +60,17 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const signout = () => {
     localStorage.clear();
     navigate("/login");
+    window.location.reload();
   };
+
   const getProfile = async () => {
     await authAPI
       .getProfile()
       .then((res: IProfile) => {
         setData({
           ...res,
+          firstName: res.name.split(" ")[0],
+          lastName: res.name.split(" ")[1],
         });
       })
       .catch((err) => alert(err));
@@ -139,7 +142,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
             <Col span={24}>
               <Row gutter={[12, 12]}>
                 <Col span={8}>
-                  <Container>
+                  <Container className="!bg-themeWhiteContainer">
                     <center>
                       <Space direction="vertical">
                         <Avatar
@@ -155,12 +158,25 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                           level={3}
                           style={{
                             margin: "5px 0",
+                            color: "#FFFFFF",
                           }}
                         >
-                          Thanawat
+                          {getData.name}
                         </Typography.Title>
-                        <Typography.Text>Frontend developer</Typography.Text>
-                        <Typography.Text>Thailand, Bangkok</Typography.Text>
+                        <Typography.Text
+                          style={{
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          {`${GetPosition(getData.positionId)}`}
+                        </Typography.Text>
+                        <Typography.Text
+                          style={{
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          Thailand, Bangkok
+                        </Typography.Text>
                       </Space>
                     </center>
                   </Container>
@@ -180,12 +196,15 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                         <Row gutter={[12, 12]}>
                           <Col span={12}>
                             <Form.Item label="Firstname">
-                              <Input />
+                              <Input value={getData.firstName} />
                             </Form.Item>
                           </Col>
                           <Col span={12}>
                             <Form.Item label="Lastname">
-                              <Input />
+                              <Input
+                                value={getData.lastName}
+                                disabled={!getData.lastName}
+                              />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -194,12 +213,12 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                         <Row gutter={[12, 12]}>
                           <Col span={12}>
                             <Form.Item label="Email">
-                              <Input />
+                              <Input value={getData.email} />
                             </Form.Item>
                           </Col>
                           <Col span={12}>
                             <Form.Item label="Telephone: (123-456-7890)">
-                              <Input />
+                              <Input value={getData.tel} />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -213,7 +232,10 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                           </Col>
                           <Col span={12}>
                             <Form.Item label="Position">
-                              <Select options={[{ label: 1, value: 1 }]} />
+                              <Input
+                                value={`${GetPosition(getData.positionId)}`}
+                                disabled
+                              />
                             </Form.Item>
                           </Col>
                         </Row>

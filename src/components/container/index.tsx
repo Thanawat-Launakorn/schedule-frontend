@@ -9,10 +9,7 @@ interface Props {
 
 const Container = ({ children, height = "100%", className }: Props) => {
   return (
-    <Card
-      style={{ height: height, width: "100%", backgroundColor: "#FFFFFF " }}
-      className={`${className}`}
-    >
+    <Card style={{ height: height, width: "100%" }} className={`${className}`}>
       {children}
     </Card>
   );

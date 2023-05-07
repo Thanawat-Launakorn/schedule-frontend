@@ -1,19 +1,9 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
 import projectConfig from "../project.config";
-const getToken = () => {
-  return localStorage.getItem("token");
-};
+import { getToken } from "../../provider/auth/Auth.Provider";
 
-const token = getToken();
-const instance = axios.create({
-  baseURL: projectConfig.baseURL,
-  headers: {
-    Accept: "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-  validateStatus: (_) => true,
-});
+const instance = axios.create();
 
 export const instanceBasic = axios.create({
   baseURL: projectConfig.baseURL,
@@ -23,6 +13,20 @@ export const instanceBasic = axios.create({
   },
   validateStatus: (_) => true,
 });
+
+instance.interceptors.request.use(
+  (request) => {
+    const token = getToken();
+    request.baseURL = `${projectConfig.baseURL}`;
+    request.headers["Authorization"] = `Bearer ${token}`;
+    request.headers["Accept"] = `application/json`;
+    request.validateStatus = (_) => true;
+    return Promise.resolve(request);
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const throwResponse = (res: AxiosResponse) => {
   const { message } = res.data?.result;

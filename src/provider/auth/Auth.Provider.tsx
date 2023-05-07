@@ -10,10 +10,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { pathname } = useLocation(); //path ปัจจุบัน
   const isPublic = pathname === "/login";
 
-  const getToken = () => {
-    return localStorage.getItem("token");
-  };
-
   const token = getToken();
 
   // console.log(token);
@@ -34,3 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 }
+
+export const getToken = () => {
+  return localStorage.getItem("token");
+};

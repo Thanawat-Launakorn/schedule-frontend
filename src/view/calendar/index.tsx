@@ -1,13 +1,15 @@
 import React from "react";
-import { Calendar, Modal } from "antd";
+import { Calendar, Form, Modal, Select } from "antd";
 import type { Dayjs } from "dayjs";
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
+import userAPI from "../../service/api/user";
 
 type Props = {};
 
 export default function AppCalendar({}: Props) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
+  const [data, setData] = React.useState();
+  const [user, setUser] = React.useState([]);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -28,6 +30,14 @@ export default function AppCalendar({}: Props) {
     console.log(value.format("YYYY-MM-DD"));
     showModal();
   };
+
+  React.useEffect(() => {
+    (async () => {
+      const res = await userAPI.getAllUser();
+      setUser(res);
+      console.log(res);
+    })();
+  }, []);
   return (
     <>
       <Calendar onPanelChange={onPanelChange} onSelect={onPanelSelect} />
@@ -36,7 +46,15 @@ export default function AppCalendar({}: Props) {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-      ></Modal>
+      >
+        <Form>
+          <Select className="">
+            {...user.map((e: any) => {
+              return <Select.Option key={e.id}>{e.name}</Select.Option>;
+            })}
+          </Select>
+        </Form>
+      </Modal>
     </>
   );
 }
