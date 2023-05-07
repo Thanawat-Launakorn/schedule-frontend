@@ -703,6 +703,26 @@
     "@typescript-eslint/types" "5.59.2"
     eslint-visitor-keys "^3.3.0"
 
+"@uiw/color-convert@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@uiw/color-convert/-/color-convert-1.2.1.tgz#a63e368b75e5ddc5421e18dd6433f052aa87a172"
+  integrity sha512-/Abt2GtZaVlGy+KT6ihqbTjYynuV0dkbMyOcqcIc7tsUZlsb+02ekwrrbRkYExclc2LdkLylMFBnH8ax6LKHXQ==
+
+"@uiw/react-color-circle@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@uiw/react-color-circle/-/react-color-circle-1.2.1.tgz#aa0e33959ecff89706c946036563d06619479d84"
+  integrity sha512-rOeM6MEiYw+IvwDGvwisb0ha16A1/bYKPXLJF0wn615/O/n6dznKfM9uv9q2RF9fjbB3DC18OOO7qMtcDoGLaA==
+  dependencies:
+    "@uiw/color-convert" "1.2.1"
+    "@uiw/react-color-swatch" "1.2.1"
+
+"@uiw/react-color-swatch@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@uiw/react-color-swatch/-/react-color-swatch-1.2.1.tgz#1f9927ba8ffa3dfa1e23c770895ff9ba703e5396"
+  integrity sha512-YrCAwY+GlOUI8jwdj6p8iuJcpUOz9JV92mqfC23qfZQMDhrBtFgI+x13bHHeXAkl3mDWu06QXwmpt014XcMf6w==
+  dependencies:
+    "@uiw/color-convert" "1.2.1"
+
 "@vitejs/plugin-react@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.0.0.tgz"

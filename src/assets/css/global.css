@@ -7,7 +7,8 @@
     margin: 0;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
-
+  
+    
 }
 
 .center {
@@ -69,14 +70,6 @@
   height: auto;
 }
 .ant-form-item > * > .ant-input{
-  border: 0px !important;
-  
-}
-
-:where(.css-dev-only-do-not-override-16s46n3).ant-picker,
-:where(.css-dev-only-do-not-override-16s46n3).ant-input,
-:where(.css-dev-only-do-not-override-16s46n3).ant-input-affix-wrapper,
-:where(.css-dev-only-do-not-override-16s46n3).ant-select:not(.ant-select-customize-input) .ant-select-selector{
   border: 0px !important;
 }
 

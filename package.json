@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@tanstack/react-query": "^4.29.5",
+    "@uiw/react-color-circle": "^1.2.1",
     "antd": "^5.4.6",
     "axios": "^1.4.0",
     "react": "^18.2.0",

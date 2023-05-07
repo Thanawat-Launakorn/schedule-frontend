@@ -8,35 +8,35 @@ export default function FormSearchUser({}: Props) {
   return (
     <React.Fragment>
       <Col md={6}>
-        <Form.Item label="ชื่อ - นามสกุล" name="id">
+        <Form.Item label="Fullname" name="id">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
-            placeholder="ชื่อ - นามสกุล"
+            placeholder="Search name"
           />
         </Form.Item>
       </Col>
       <Col md={6}>
-        <Form.Item label="ค้นหาอีเมล" name="email">
+        <Form.Item label="Email" name="email">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
-            placeholder="ค้นหาอีเมล"
+            placeholder="Search email"
           />
         </Form.Item>
       </Col>
 
       <Col md={6}>
-        <Form.Item label="เบอร์โทรศัพท์ (มือถือ)" name="phone">
+        <Form.Item label="Telephone" name="phone">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
-            placeholder="เบอร์โทรศัพท์ (มือถือ)"
+            placeholder="Search telephone"
           />
         </Form.Item>
       </Col>
       <Col md={6}>
-        <Form.Item label="สถานะ" name="status">
+        <Form.Item label="status" name="status">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
-            placeholder="สถานะ"
+            placeholder="Search status"
           />
         </Form.Item>
       </Col>

@@ -1,4 +1,5 @@
 import type { RouteObject } from "react-router-dom";
+import CreateRole from "../view/listuser/createRole";
 import AppCalendar from "../view/calendar";
 import Dashboard from "../view/dashboard";
 import Error404 from "../view/error/error404";
@@ -16,9 +17,10 @@ export const dashboard = [
   { path: "/dashboard", element: <Dashboard />, key: 1 },
 ];
 export const user = [
-  { path: "/listuser", element: <ListUser />, key: 2 },
-  { path: "/listuser/create", element: <CreateUser /> },
-  { path: "/listuser/edit/:id", element: <EditUser /> },
+  { path: "/user-management", element: <ListUser />, key: 2 },
+  { path: "/user-management/create/user", element: <CreateUser /> },
+  { path: "/user-management/create/role", element: <CreateRole /> },
+  { path: "/user-management/edit", element: <EditUser /> },
 ];
 
 export const calendar = [

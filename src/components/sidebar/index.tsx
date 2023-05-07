@@ -98,7 +98,7 @@ export default function AppSidebar({ trigger, collapsed, setTheme }: Props) {
       <Menu
         theme={setTheme}
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[]}
         items={sidebarMenu}
         onClick={handleMenu}
         onMouseEnter={() => handleMouseEnter}
