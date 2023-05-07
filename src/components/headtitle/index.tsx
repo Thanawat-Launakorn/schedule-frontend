@@ -1,4 +1,4 @@
-import { Row, Col, Typography, Space, Button } from "antd";
+import { Row, Col, Typography, Space, Button, theme } from "antd";
 import React from "react";
 
 type Props = {
@@ -21,11 +21,32 @@ export default function HeadTitle({
   actionName,
   children,
 }: Props) {
+  const {
+    token: { colorTextLabel, colorPrimary },
+  } = theme.useToken();
+
   return (
-    <Row justify="space-between" align="middle">
+    <Row
+      justify="space-between"
+      align="middle"
+      style={{
+        marginBottom: 10,
+      }}
+    >
       <Col>
         {title && (
-          <Typography.Title level={4} style={{ marginBottom: 0 }}>
+          <Typography.Title
+            level={4}
+            style={{
+              marginBottom: 0,
+              color: colorPrimary,
+              backgroundColor: "#FFFFFF",
+              padding: "10px 30px",
+              borderRadius: 10,
+              boxShadow:
+                "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+            }}
+          >
             {title}
           </Typography.Title>
         )}
@@ -35,7 +56,7 @@ export default function HeadTitle({
           <Space>
             {!!onCancel && (
               <Button style={{ width: 120, height: 48 }} onClick={onCancel}>
-                ยกเลิก
+                Cancel
               </Button>
             )}
             {!!onSubmit && (
@@ -43,8 +64,9 @@ export default function HeadTitle({
                 style={{ width: 120, height: 48 }}
                 type="primary"
                 onClick={onSubmit}
+                htmlType="submit"
               >
-                บันทึก
+                Save Changes
               </Button>
             )}
             {!!onAdd && (

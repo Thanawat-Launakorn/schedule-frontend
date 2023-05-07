@@ -1,8 +1,11 @@
 import React from "react";
-import { Calendar, Form, Modal, Select } from "antd";
+import { Calendar, Form, Modal, notification, Select, SelectProps } from "antd";
 import type { Dayjs } from "dayjs";
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
 import userAPI from "../../service/api/user";
+import { IUser } from "../../service/api/user/user-interface";
+import scheduleAPI from "../../service/api/schedule";
+import { openNotification } from "../../components/notifications";
 
 type Props = {};
 
@@ -15,7 +18,15 @@ export default function AppCalendar({}: Props) {
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    scheduleAPI
+      .createSchedule()
+      .then(() => {
+        openNotification({ type: "success", title: "success" });
+      })
+      .catch((err) => {
+        openNotification({ type: "success", title: "success" });
+      })
+      .finally(() => setIsModalOpen(false));
   };
 
   const handleCancel = () => {
@@ -31,13 +42,19 @@ export default function AppCalendar({}: Props) {
     showModal();
   };
 
+  const handleChange = () => {};
+
+  const options: SelectProps["options"] = user.map((e: IUser) => {
+    return { value: e.id, label: e.name };
+  });
+
   React.useEffect(() => {
     (async () => {
       const res = await userAPI.getAllUser();
       setUser(res);
-      console.log(res);
     })();
   }, []);
+
   return (
     <>
       <Calendar onPanelChange={onPanelChange} onSelect={onPanelSelect} />
@@ -48,11 +65,14 @@ export default function AppCalendar({}: Props) {
         onCancel={handleCancel}
       >
         <Form>
-          <Select className="">
-            {...user.map((e: any) => {
-              return <Select.Option key={e.id}>{e.name}</Select.Option>;
-            })}
-          </Select>
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="Please select"
+            onChange={handleChange}
+            options={options}
+          />
         </Form>
       </Modal>
     </>

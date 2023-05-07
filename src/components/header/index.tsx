@@ -146,7 +146,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                     <center>
                       <Space direction="vertical">
                         <Avatar
-                          src={images1}
+                          src={getData.img}
                           alt="image-profile"
                           style={{
                             width: 150,
@@ -323,7 +323,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
             }}
           >
             <Col style={{}} className="bg-themeWhiteContainer">
-              <Avatar src={images1} alt="image-profile" size="large" />
+              <Avatar src={getData.img} alt="image-profile" size="large" />
             </Col>
             <Col>
               <Typography.Title level={5} style={titleStyle}>

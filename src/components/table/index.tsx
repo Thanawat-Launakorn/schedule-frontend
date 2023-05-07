@@ -1,4 +1,4 @@
-import { EditFilled, EyeFilled } from "@ant-design/icons";
+import { EditFilled, EyeFilled, DeleteFilled } from "@ant-design/icons";
 import {
   Col,
   Row,
@@ -7,6 +7,7 @@ import {
   Table,
   Space,
   Button,
+  Divider,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
@@ -19,6 +20,7 @@ type Props = {
   columns: ColumnsType<any>;
   data?: readonly object[] | [];
   onEdit?: (record: object) => void;
+  onDelete?: (record: object) => void;
   onView?: (record: object) => void;
   onChange?: (pagination: TablePaginationConfig) => void;
   pagination?: TablePaginationConfig;
@@ -31,6 +33,7 @@ export default function TableLayout({
   columns,
   data,
   onEdit,
+  onDelete,
   onView,
   onChange,
   pagination,
@@ -51,6 +54,12 @@ export default function TableLayout({
           {!!onView && (
             <Button type="ghost" onClick={() => onView(record)}>
               <EyeFilled />
+            </Button>
+          )}
+          <Divider type="vertical" />
+          {!!onDelete && (
+            <Button type="ghost" onClick={() => onDelete(record)}>
+              <DeleteFilled />
             </Button>
           )}
         </Space>

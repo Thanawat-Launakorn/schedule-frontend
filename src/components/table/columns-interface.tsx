@@ -14,11 +14,11 @@ export const columnsU: ColumnsType<IUserColumnType> = [
     render: (_: any, record: IUserColumnType) => {
       return (
         <Row align="middle">
-          <Col>
-            <Avatar src="" alt="image-profile" size="large" />
+          <Col style={{ marginRight: 10 }}>
+            <Avatar src={record.img} alt="image-profile" size="large" />
           </Col>
           <Col>
-            <Typography.Title level={5} style={{ margin: 0 }}>
+            <Typography.Title level={5} style={{ margin: 0, color: "#2F58CD" }}>
               {`${record.name}`}
             </Typography.Title>
             <Typography.Text>{`${record.email}`}</Typography.Text>
@@ -66,11 +66,11 @@ export const columnsP: ColumnsType<IUserColumnType> = [
     render: (_: any, record: IUserColumnType) => {
       return (
         <Row align="middle">
-          <Col>
-            <Avatar src="" alt="image-profile" size="large" />
+          <Col style={{ marginRight: 10 }}>
+            <Avatar src={record.img} alt="image-profile" size="large" />
           </Col>
           <Col>
-            <Typography.Title level={5} style={{ margin: 0 }}>
+            <Typography.Title level={5} style={{ margin: 0, color: "#2F58CD" }}>
               {`${record.name}`}
             </Typography.Title>
             <Typography.Text>{`${record.email}`}</Typography.Text>

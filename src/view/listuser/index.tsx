@@ -35,6 +35,12 @@ export default function ListUser({}: Props) {
     navigate(`/user-management/edit`, { state: { id: data.id } });
   };
 
+  const handleClickDeleteUser = (record: object) => {
+    const data = record as IUser;
+    userAPI.deleteUser(Number(data.id));
+    window.location.reload();
+  };
+
   const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
   const columnPosition: ColumnsType<IUserColumnType> = [...columnsP];
   const items: IItemsTabLayout[] = [
@@ -54,6 +60,7 @@ export default function ListUser({}: Props) {
             columns={columnUser}
             data={userData}
             onEdit={handleClickEditUser}
+            onDelete={handleClickDeleteUser}
           />
         ),
       },

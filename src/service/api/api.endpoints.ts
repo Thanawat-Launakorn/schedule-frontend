@@ -14,6 +14,18 @@ export const endpoints = {
     selectposition: `${projectConfig.baseURL}/user/query-by-position`,
     delete: `${projectConfig.baseURL}/user/remove`,
   },
+  position: {
+    getAll: `${projectConfig.baseURL}/position/findAll`,
+  },
+  calendar: {
+    create: `${projectConfig.baseURL}/schedule/create`,
+    random: `${projectConfig.baseURL}/schedule/random`,
+    findAll: `${projectConfig.baseURL}/schedule/findAll`,
+    sumpy: `${projectConfig.baseURL}/schedule/sumpy`,
+    payoften: `${projectConfig.baseURL}/schedule/payoften`,
+    update: `${projectConfig.baseURL}/schedule/update`,
+    delete: `${projectConfig.baseURL}/schedule/delete-task`,
+  },
 };
 
 export default endpoints;

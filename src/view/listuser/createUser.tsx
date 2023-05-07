@@ -13,10 +13,10 @@ import {
 import Container from "../../components/container";
 import React from "react";
 import { IUser, IUserPost } from "../../service/api/user/user-interface";
-import userAPI, { useGetUserByID } from "../../service/api/user";
+import userAPI from "../../service/api/user";
 import { Image } from "antd";
 import HeadTitle from "../../components/headtitle";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
@@ -34,16 +34,11 @@ const accepts = {
 
 export default function FCreateUser({ onAny, disabled }: Props) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const id = location?.state;
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
-  const { data, isLoading } = useGetUserByID(id);
-  const [initialValues, setValues] = React.useState({} as IUser);
   const [getPosition, setPosition] = React.useState<Array<IPosition>>([]);
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
-
   // const profileId = Form.useWatch("profileId", form);
   const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
@@ -93,57 +88,43 @@ export default function FCreateUser({ onAny, disabled }: Props) {
     form.submit();
   };
   const HeadTitleProps = {
-    title: "Edit User",
+    title: "Create User",
   };
 
   const onFinish = (values: IUserPost) => {
-    userAPI.updateUser(
-      {
+    userAPI
+      .createUser({
         email: values.email,
         name: `${values.firstname} ${values.lastname}`,
         password: values.password,
         img: imageUrl,
         position: values.position,
         tel: values.tel,
-      },
-      id
-    );
+      })
+      .then(() => {
+        openNotification({ type: "success", title: "success" });
+      })
+      .catch((err) => {
+        openNotification({ type: "error", title: `${err}` });
+      })
+      .finally(() => {
+        navigate(-1);
+      });
   };
 
   React.useEffect(() => {
     (async () => {
       const res = await positionAPI.getAllPosition();
       setPosition(res);
-
-      // const data = await userAPI.getOneUser(id);
-
-      setValues({
-        id: 1,
-        name: "admin",
-        email: "admin@gmail.com",
-        password:
-          "$2b$10$kJ766EIaRPuf0zMf0OQRx.w1asuoXNcv7JguIjqiEY2CoK9wiSfP.",
-        img: "string",
-        tel: "string",
-        position: 6,
-      });
     })();
   }, []);
-
   return (
     <>
       <Form
         name="create-user"
         labelCol={{ span: 24 }}
         layout="horizontal"
-        initialValues={{
-          firstname: data?.name.split(" ")[0],
-          latsname: data?.name.split(" ")[1],
-          email: data?.email,
-          img: data?.img,
-          tel: data?.tel,
-          position: data?.position,
-        }}
+        initialValues={{ remember: true }}
         onFinish={onFinish}
       >
         <Row gutter={[12, 12]}>
@@ -328,7 +309,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
                               },
                             ]}
                           >
-                            <Input.Password type="password" disabled />
+                            <Input.Password type="password" />
                           </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -336,7 +317,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
                             label="Confirm password"
                             name="confirm password"
                           >
-                            <Input.Password type="password" disabled />
+                            <Input.Password type="password" />
                           </Form.Item>
                         </Col>
                       </Row>

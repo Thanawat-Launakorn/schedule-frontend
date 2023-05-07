@@ -3,9 +3,21 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  img?: string;
+  tel: string;
+  position: number;
+}
+
+export interface IUserPost {
+  id: string | number;
+  name: string;
+  email: string;
+  password: string;
   img: string;
   tel: string;
   position: number;
+  firstname?: string;
+  lastname?: string;
 }
 
 export interface IUserColumnType extends Omit<IUser, "password"> {

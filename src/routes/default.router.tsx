@@ -6,12 +6,12 @@ import Error404 from "../view/error/error404";
 import Error500 from "../view/error/error500";
 import DefaultLayout from "../view/layout/defaultLayout";
 import ListUser from "../view/listuser";
-import CreateUser from "../view/listuser/create";
 import EditUser from "../view/listuser/edit";
 import Signin from "../view/login";
 import NonLayout from "../view/nolayout";
 import Setting from "../view/setting";
 import Signout from "../view/signout";
+import CreateUser from "../view/listuser/createUser";
 
 export const dashboard = [
   { path: "/dashboard", element: <Dashboard />, key: 1 },
