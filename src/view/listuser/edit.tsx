@@ -1,7 +1,7 @@
 import { Form, Input, Select, Upload, Button } from "antd";
 import Container from "../../components/container";
 import React from "react";
-import { IUser } from "service/api/user/user-interface";
+import { IUser } from "../../service/api/user/user-interface";
 import userAPI from "../../service/api/user";
 import { useLocation } from "react-router-dom";
 type Props = {};
