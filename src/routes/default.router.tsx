@@ -8,11 +8,11 @@ import DefaultLayout from "../view/layout/defaultLayout";
 import ListUser from "../view/listuser";
 import CreateUser from "../view/listuser/create";
 import EditUser from "../view/listuser/edit";
-
 import Signin from "../view/login";
 import NonLayout from "../view/nolayout";
 import Setting from "../view/setting";
 import Signout from "../view/signout";
+
 export const dashboard = [
   { path: "/dashboard", element: <Dashboard />, key: 1 },
 ];

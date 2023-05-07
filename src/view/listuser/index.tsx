@@ -61,7 +61,7 @@ export default function ListUser({}: Props) {
 
     {
       key: "2",
-      label: "Role",
+      label: "Position",
       children: {
         search: {
           item: <FormSearchRole />,
@@ -108,7 +108,7 @@ export default function ListUser({}: Props) {
           <HeadTitle
             {...HeadTitleProps}
             onAdd={onAdd}
-            actionName={selectTabs === "1" ? "Add user" : "Add role"}
+            actionName={selectTabs === "1" ? "Add User" : "Add Position"}
           />
         </Col>
         <Col span={24}>

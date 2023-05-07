@@ -6,6 +6,8 @@ export interface ISignin {
 export interface IProfile {
   id: number;
   name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   img: string;
