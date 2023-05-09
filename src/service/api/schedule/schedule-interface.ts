@@ -1,5 +1,5 @@
 export interface ISchedulePost {
-  calendar: number;
+  calendar: string;
   user: number;
   dopay: string;
   howmuch: number;
@@ -54,4 +54,45 @@ export interface IScheduleGet {
   UpdateAt: string;
   user?: User;
   calendar?: Calendar;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  img: string;
+  tel: string;
+  positionId: number;
+  createAt: string;
+  deleteAt: null;
+  UpdateAt: string;
+  Schedule: IScheduleGetAll[];
+}
+
+export interface Calendar {
+  id: number;
+  date: string;
+  createAt: string;
+  deleteAt: null;
+  UpdateAt: string;
+  Schedule: IScheduleGetAll[];
+}
+
+export interface IScheduleGetAll {
+  id: number;
+  userId: number;
+  calendarId: number;
+  dopay: Dopay;
+  howmuch: number;
+  createAt: string;
+  deleteAt: null;
+  UpdateAt: string;
+  user?: User | null;
+  calendar?: Calendar;
+}
+
+export enum Dopay {
+  Do = "Do",
+  Pay = "Pay",
 }

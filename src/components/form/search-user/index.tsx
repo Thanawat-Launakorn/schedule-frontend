@@ -8,7 +8,7 @@ export default function FormSearchUser({}: Props) {
   return (
     <React.Fragment>
       <Col md={6}>
-        <Form.Item label="Fullname" name="id">
+        <Form.Item label="Fullname" name="name">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search name"

@@ -23,6 +23,7 @@ import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
 import positionAPI from "../../service/api/position";
+
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -32,19 +33,20 @@ const accepts = {
   string: ".jpg,.jpeg,.png,.webp",
 };
 
-export default function FCreateUser({ onAny, disabled }: Props) {
+export default function FEditUser({ onAny, disabled }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const id = location?.state;
+  const { id } = location?.state;
+
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const { data, isLoading } = useGetUserByID(id);
+  console.log(data);
+
   const [initialValues, setValues] = React.useState({} as IUser);
   const [getPosition, setPosition] = React.useState<Array<IPosition>>([]);
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
-
-  // const profileId = Form.useWatch("profileId", form);
   const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
   ) => {
@@ -97,38 +99,52 @@ export default function FCreateUser({ onAny, disabled }: Props) {
   };
 
   const onFinish = (values: IUserPost) => {
-    userAPI.updateUser(
-      {
-        email: values.email,
-        name: `${values.firstname} ${values.lastname}`,
-        password: values.password,
-        img: imageUrl,
-        position: values.position,
-        tel: values.tel,
-      },
-      id
-    );
+    console.log(values);
+
+    userAPI
+      .updateUser(
+        {
+          email: values.email,
+          name: `${values.firstname} ${values.lastname}`,
+          password: values.password,
+          img: imageUrl,
+          position: values.position,
+          tel: values.tel,
+        },
+        id
+      )
+      .then(() => {
+        openNotification({ type: "success", title: "success" });
+        window.location.reload();
+      })
+      .catch(() => {
+        openNotification({ type: "error", title: "error" });
+      })
+      .finally(() => navigate("/user-management"));
   };
 
   React.useEffect(() => {
     (async () => {
-      const res = await positionAPI.getAllPosition();
-      setPosition(res);
+      const resPosition = await positionAPI.getAllPosition();
 
-      // const data = await userAPI.getOneUser(id);
-
-      setValues({
-        id: 1,
-        name: "admin",
-        email: "admin@gmail.com",
-        password:
-          "$2b$10$kJ766EIaRPuf0zMf0OQRx.w1asuoXNcv7JguIjqiEY2CoK9wiSfP.",
-        img: "string",
-        tel: "string",
-        position: 6,
-      });
+      setPosition(resPosition);
     })();
   }, []);
+
+  React.useEffect(() => {
+    setImageUrl(data?.img);
+    initialData();
+  }, [data]);
+
+  const initialData = () => {
+    if (!data) return;
+
+    form.setFieldsValue({
+      ...data,
+      firstname: data.name.split(" ")[0],
+      lastname: data.name.split(" ")[1],
+    });
+  };
 
   return (
     <>
@@ -136,14 +152,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
         name="create-user"
         labelCol={{ span: 24 }}
         layout="horizontal"
-        initialValues={{
-          firstname: data?.name.split(" ")[0],
-          latsname: data?.name.split(" ")[1],
-          email: data?.email,
-          img: data?.img,
-          tel: data?.tel,
-          position: data?.position,
-        }}
+        form={form}
         onFinish={onFinish}
       >
         <Row gutter={[12, 12]}>
@@ -168,7 +177,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
                     <Col span={24}>
                       <center>
                         <Form.Item
-                          name={"img"}
+                          name="img"
                           valuePropName="src"
                           className="w-full center"
                           style={{ margin: 0 }}

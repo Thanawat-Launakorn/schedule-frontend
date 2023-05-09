@@ -1,5 +1,19 @@
-import { AppstoreOutlined, BarsOutlined } from "@ant-design/icons";
-import { Avatar, Button, Col, Row, Segmented } from "antd";
+import {
+  AppstoreOutlined,
+  BarsOutlined,
+  ContactsOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Col,
+  Form,
+  Row,
+  Segmented,
+  Space,
+  Typography,
+} from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Tab from "../../components/tab";
@@ -12,16 +26,23 @@ import { columnsP, columnsU } from "../../components/table/columns-interface";
 import userAPI from "../../service/api/user";
 import FormSearchRole from "../../components/form/search-position";
 import HeadTitle from "../../components/headtitle";
+import { openNotification } from "../../components/notifications";
+import { useForm } from "antd/es/form/Form";
 
 type Props = {};
 
 export default function ListUser({}: Props) {
+  // const [form] = useForm();
   const [selectTabs, setSelectTabs] = React.useState<String>("1");
   const navigate = useNavigate();
   const [userData, setData] = React.useState<Array<IUser>>([]);
+  const [params, setParams] = React.useState<Array<IUser>>([]);
+
   const handleOnSearch = (values: any) => {
     console.log("Success:", values);
+    setParams(values);
   };
+
   const handleOnCancelSearch = () => {};
 
   const handleOnTabChange = (activeKey: string) => {
@@ -35,10 +56,14 @@ export default function ListUser({}: Props) {
     navigate(`/user-management/edit`, { state: { id: data.id } });
   };
 
-  const handleClickDeleteUser = (record: object) => {
+  const handleClickDeleteUser = async (record: object) => {
     const data = record as IUser;
-    userAPI.deleteUser(Number(data.id));
-    window.location.reload();
+    try {
+      await userAPI.deleteUser(Number(data.id));
+    } catch (err) {
+    } finally {
+      window.location.reload();
+    }
   };
 
   const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
@@ -102,12 +127,12 @@ export default function ListUser({}: Props) {
 
   React.useEffect(() => {
     (async () => {
-      const res = await userAPI.getAllUser();
-      console.log(res);
+      const res = await userAPI.getAllUser(params);
 
       setData(res);
     })();
-  }, []);
+  }, [params]);
+
   return (
     <React.Fragment>
       <Row gutter={[12, 12]}>
@@ -115,7 +140,23 @@ export default function ListUser({}: Props) {
           <HeadTitle
             {...HeadTitleProps}
             onAdd={onAdd}
-            actionName={selectTabs === "1" ? "Add User" : "Add Position"}
+            actionName={
+              selectTabs === "1" ? (
+                <Space align="center">
+                  <UserAddOutlined />
+                  <Typography.Text style={{ color: "white", marginBottom: 0 }}>
+                    Add User
+                  </Typography.Text>
+                </Space>
+              ) : (
+                <Space align="center">
+                  {/* <ContactsOutlined /> */}
+                  <Typography.Text style={{ color: "white", marginBottom: 0 }}>
+                    Add Position
+                  </Typography.Text>
+                </Space>
+              )
+            }
           />
         </Col>
         <Col span={24}>

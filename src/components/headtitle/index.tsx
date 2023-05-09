@@ -4,7 +4,7 @@ import React from "react";
 type Props = {
   children?: React.ReactNode;
   title?: string;
-  actionName?: string;
+  actionName?: string | React.ReactElement;
   breadcrumbNameMap?: Record<string, string>;
   onCancel?: VoidFunction | false;
   onSubmit?: VoidFunction | false;

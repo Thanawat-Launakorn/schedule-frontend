@@ -10,6 +10,7 @@ import {
   Typography,
   UploadProps,
 } from "antd";
+
 import Container from "../../components/container";
 import React from "react";
 import { IUser, IUserPost } from "../../service/api/user/user-interface";
@@ -22,7 +23,7 @@ import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
-import positionAPI from "../../service/api/position";
+import positionAPI, { useGetPosition } from "../../service/api/position";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -37,6 +38,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const [getPosition, setPosition] = React.useState<Array<IPosition>>([]);
+
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
   // const profileId = Form.useWatch("profileId", form);

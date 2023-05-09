@@ -1,27 +1,27 @@
 export default function GetPosition(id?: number) {
   switch (id) {
     case 1:
-      return "frontend developer";
+      return "Backend Developer";
       break;
 
     case 2:
-      return "backend developer";
+      return "Frontend Developer";
       break;
 
     case 3:
-      return "tester";
+      return "Tester";
       break;
 
     case 4:
-      return "project manager";
+      return "Project Manager";
       break;
 
     case 5:
-      return "business analysis";
+      return "Business Analysis";
       break;
 
     case 6:
-      return "admin";
+      return "Admin";
       break;
   }
 }

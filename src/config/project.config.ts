@@ -3,7 +3,7 @@ export const projectConfig = {
   projectDescription: "",
   favicon: "",
 
-  baseURL: "http://localhost:3001",
+  baseURL: "http://192.168.2.62:3001",
   apiVersion: "api",
 };
 

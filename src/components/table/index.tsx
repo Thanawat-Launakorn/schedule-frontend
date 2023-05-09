@@ -42,13 +42,17 @@ export default function TableLayout({
     {
       title: "Action",
       key: "action",
-      width: "5%",
+      width: "1%",
       align: "center",
       render: (_, record) => (
         <Space size="middle">
           {!!onEdit && (
             <Button type="ghost" onClick={() => onEdit(record)}>
-              <EditFilled />
+              <EditFilled
+                style={{
+                  color: "#2F58CD",
+                }}
+              />
             </Button>
           )}
           {!!onView && (
@@ -59,7 +63,11 @@ export default function TableLayout({
           <Divider type="vertical" />
           {!!onDelete && (
             <Button type="ghost" onClick={() => onDelete(record)}>
-              <DeleteFilled />
+              <DeleteFilled
+                style={{
+                  color: "tomato",
+                }}
+              />
             </Button>
           )}
         </Space>

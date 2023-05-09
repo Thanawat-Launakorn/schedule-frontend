@@ -298,53 +298,102 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
         </Form>
       </Modal>
       <Row justify="space-between" align="middle" style={{ height: "100%" }}>
-        <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            fontSize: 20,
-            width: 64,
-            height: "100%",
-          }}
-        />
-        <Dropdown menu={{ items }} placement="bottomRight" trigger={["hover"]}>
-          <Row
-            justify="space-between"
-            className="card-profile"
-            align="middle"
-            gutter={[16, 0]}
+        <Col>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
             style={{
-              marginRight: 40,
-              borderRadius: 5,
-              overflow: "hidden",
-              boxShadow:
-                "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+              fontSize: 20,
+              width: 64,
+              height: "100%",
             }}
-          >
-            <Col style={{}} className="bg-themeWhiteContainer">
-              <Avatar src={getData.img} alt="image-profile" size="large" />
+          />
+        </Col>
+        <Col>
+          <Row gutter={[24, 0]}>
+            <Col style={{ marginRight: 23 }}>
+              <Row justify="space-around" align="middle">
+                <Col>
+                  <Typography.Title
+                    level={5}
+                    style={{
+                      margin: 0,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {}}
+                  >
+                    EN
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <Divider type="vertical" />
+                </Col>
+                <Col>
+                  <Typography.Title
+                    level={5}
+                    style={{
+                      margin: 0,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {}}
+                  >
+                    TH
+                  </Typography.Title>
+                </Col>
+              </Row>
             </Col>
             <Col>
-              <Typography.Title level={5} style={titleStyle}>
-                {getData.name}
-              </Typography.Title>
-              <Typography.Title
-                style={{
-                  color: "gray",
-                  fontSize: 10,
-                  fontWeight: "initial",
-                  margin: 0,
-                }}
+              <Dropdown
+                menu={{ items }}
+                placement="bottomRight"
+                trigger={["hover"]}
               >
-                {`${GetPosition(getData.positionId)}`}
-              </Typography.Title>
-            </Col>
-            <Col>
-              <CaretDownOutlined style={{ fontSize: 15, cursor: "pointer" }} />
+                <Row
+                  justify="space-between"
+                  className="card-profile"
+                  align="middle"
+                  gutter={[16, 0]}
+                  style={{
+                    marginRight: 40,
+                    borderRadius: 5,
+                    overflow: "hidden",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+                  }}
+                >
+                  <Col style={{}} className="bg-themeWhiteContainer">
+                    <Avatar
+                      src={getData.img}
+                      alt="image-profile"
+                      size="large"
+                    />
+                  </Col>
+                  <Col>
+                    <Typography.Title level={5} style={titleStyle}>
+                      {getData.name}
+                    </Typography.Title>
+                    <Typography.Title
+                      style={{
+                        color: "gray",
+                        fontSize: 10,
+                        fontWeight: "initial",
+                        margin: 0,
+                      }}
+                    >
+                      {`${GetPosition(getData.positionId)}`}
+                    </Typography.Title>
+                  </Col>
+                  <Col>
+                    <CaretDownOutlined
+                      style={{ fontSize: 15, cursor: "pointer" }}
+                    />
+                  </Col>
+                </Row>
+              </Dropdown>
             </Col>
           </Row>
-        </Dropdown>
+        </Col>
       </Row>
     </Layout.Header>
   );

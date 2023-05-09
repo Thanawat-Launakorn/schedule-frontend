@@ -6,6 +6,8 @@ export interface IUser {
   img?: string;
   tel: string;
   position: number;
+  firstname?: string;
+  lastname?: string;
 }
 
 export interface IUserPost {

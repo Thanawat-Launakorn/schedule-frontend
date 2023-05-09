@@ -12,25 +12,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const token = getToken();
 
-  // console.log(token);
-  // console.log(isPublic);
-
-  // const { isLoading, data, isError } = useGetMe(isPublic);
-  // if (isLoading && !isPublic) {
-  //   return <div>loading</div>;
-  // }
   if (!token && !isPublic) {
     return <Navigate to="/login" replace />;
   }
 
-  // if (data && !data?.role?.isActive) {
-  //   // Logout();
-  //   return <Navigate to="/login" replace />;
-  // }
-
   return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 }
 
+//getToken
 export const getToken = () => {
   return localStorage.getItem("token");
 };

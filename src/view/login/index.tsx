@@ -20,7 +20,7 @@ export default function Signin({}: Props) {
         openNotification({ type: "success", title: "success" });
       })
       .catch((err) => {
-        alert(err);
+        openNotification({ type: "error", title: "wrong email or password!" });
       })
       .finally(() => {
         navigate("/dashboard");
