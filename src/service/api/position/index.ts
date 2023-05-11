@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from "react-query";
 import axios, { throwResponse } from "../../../config/axios/axios.config";
 import endpoints from "../api.endpoints";
+import { IPosition } from "./position-interface";
 
 const statusSuccess = [200, 201];
 

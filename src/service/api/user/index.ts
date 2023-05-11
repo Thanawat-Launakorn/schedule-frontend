@@ -2,11 +2,11 @@ import { useQuery, UseQueryResult } from "react-query";
 import axios, { throwResponse } from "../../../config/axios/axios.config";
 import projectConfig from "../../../config/project.config";
 import endpoints from "../api.endpoints";
-import { IUser, IUserPost } from "./user-interface";
+import { IUser, IUserPost, IUserSearch } from "./user-interface";
 const statusSuccess = [200, 201];
 
-export async function getAllUser(params: any) {
-  const res = await axios.get(`${endpoints.user.getAll}`);
+export async function getAllUser(params?: IUserSearch) {
+  const res = await axios.get(`${endpoints.user.getAll}${params?.name}`);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
@@ -47,7 +47,7 @@ export const useGetUserByID = (
   );
 };
 
-export async function createUser(params?: Omit<IUser, "id">) {
+export async function createUser(params?: Omit<IUserPost, "id">) {
   const res = await axios.post(`${endpoints.user.create}`, params);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }

@@ -1,4 +1,4 @@
-interface IPosition {
+export interface IPosition {
   id: number;
   position: string;
   createAt: string;
@@ -7,7 +7,7 @@ interface IPosition {
   user: User[];
 }
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
@@ -21,7 +21,7 @@ interface User {
   position: Position;
 }
 
-interface Position {
+export interface Position {
   id: number;
   position: string;
   createAt: string;

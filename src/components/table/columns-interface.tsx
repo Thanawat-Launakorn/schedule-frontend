@@ -88,7 +88,7 @@ export const columnsP: ColumnsType<IUserColumnType> = [
     render: (_: any, record: IUserColumnType) => {
       return (
         <Row>
-          <div>{`${GetPosition(record.positionId)}`}</div>
+          <div>{`${record.position.position}`}</div>
         </Row>
       );
     },

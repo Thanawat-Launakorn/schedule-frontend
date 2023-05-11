@@ -108,7 +108,7 @@ export default function FEditUser({ onAny, disabled }: Props) {
           name: `${values.firstname} ${values.lastname}`,
           password: values.password,
           img: imageUrl,
-          position: values.position,
+          positionId: values.positionId,
           tel: values.tel,
         },
         id

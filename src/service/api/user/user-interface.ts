@@ -1,3 +1,5 @@
+import { IPosition } from "../position/position-interface";
+
 export interface IUser {
   id: string | number;
   name: string;
@@ -5,9 +7,11 @@ export interface IUser {
   password: string;
   img?: string;
   tel: string;
-  position: number;
+  status?: string;
+  positionId: number;
   firstname?: string;
   lastname?: string;
+  position?: IPosition;
 }
 
 export interface IUserPost {
@@ -15,9 +19,9 @@ export interface IUserPost {
   name: string;
   email: string;
   password: string;
-  img: string;
+  img?: string;
   tel: string;
-  position: number;
+  positionId: number;
   firstname?: string;
   lastname?: string;
 }
@@ -27,4 +31,12 @@ export interface IUserColumnType extends Omit<IUser, "password"> {
   firstName: string;
   lastName: string;
   positionId: number;
+  position: IPosition;
+}
+
+export interface IUserSearch {
+  email: string;
+  name: string;
+  tel: string;
+  status?: string;
 }

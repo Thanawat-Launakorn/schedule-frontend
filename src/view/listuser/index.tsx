@@ -36,12 +36,14 @@ export default function ListUser({}: Props) {
   const [selectTabs, setSelectTabs] = React.useState<String>("1");
   const navigate = useNavigate();
   const [userData, setData] = React.useState<Array<IUser>>([]);
-  const [params, setParams] = React.useState<Array<IUser>>([]);
+  const [params, setParams] = React.useState<any>({});
 
   const handleOnSearch = (values: any) => {
     console.log("Success:", values);
     setParams(values);
   };
+
+  console.log(params);
 
   const handleOnCancelSearch = () => {};
 
@@ -105,7 +107,7 @@ export default function ListUser({}: Props) {
             title="Table Role"
             id=""
             columns={columnPosition}
-            data={userData}
+            data={[]}
             onEdit={handleClickEditUser}
           />
         ),
@@ -128,10 +130,10 @@ export default function ListUser({}: Props) {
   React.useEffect(() => {
     (async () => {
       const res = await userAPI.getAllUser(params);
-
-      setData(res);
+      setData(res.data);
     })();
   }, [params]);
+  console.log(userData);
 
   return (
     <React.Fragment>
