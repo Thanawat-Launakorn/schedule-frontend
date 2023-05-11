@@ -3,6 +3,7 @@ import {
   EyeFilled,
   DeleteFilled,
   FileExcelFilled,
+  CloudUploadOutlined,
 } from "@ant-design/icons";
 import {
   Col,
@@ -85,21 +86,29 @@ export default function TableLayout({
   return (
     <Row>
       <Col span={24}>
-        <Row justify="space-between">
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ margin: 0, marginBottom: 20 }}
+        >
           <Col span={12}>
-            <Typography.Title level={5} style={{ margin: 0, marginBottom: 20 }}>
-              {title}
-            </Typography.Title>
+            <Typography.Title level={5}>{title}</Typography.Title>
           </Col>
           {title === "Table User" && (
             <Col span={12} className="text-end">
-              <Typography.Text style={{ fontSize: "16px", color: "green" }}>
-                <FileExcelFilled
-                  onClick={exportExcel.handleDownloadExportUser}
-                  style={{ fontSize: "28px", color: "green" }}
-                />
-                user
-              </Typography.Text>
+              <Button className="w-28">
+                <Row align="middle" justify="space-between">
+                  <CloudUploadOutlined className="text-lg" />
+
+                  <FileExcelFilled
+                    onClick={exportExcel.handleDownloadExportUser}
+                    style={{ display: "none" }}
+                  />
+                  <Typography.Title level={5} style={{ margin: 0 }}>
+                    import
+                  </Typography.Title>
+                </Row>
+              </Button>
             </Col>
           )}
           {title === "Table Role" && (

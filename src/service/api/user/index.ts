@@ -1,8 +1,12 @@
 import { useQuery, UseQueryResult } from "react-query";
 import axios, { throwResponse } from "../../../config/axios/axios.config";
-import projectConfig from "../../../config/project.config";
 import endpoints from "../api.endpoints";
-import { IUser, IUserPost, IUserUpdatePassword } from "./user-interface";
+import {
+  IUser,
+  IUserGetAll,
+  IUserPost,
+  IUserUpdatePassword,
+} from "./user-interface";
 const statusSuccess = [200, 201];
 
 export async function getAllUser(params: any) {
@@ -10,11 +14,7 @@ export async function getAllUser(params: any) {
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
-export const useGetAllUser = (
-  params?: IUser
-): UseQueryResult<Array<IUser>, Error> => {
-  console.log("params", params);
-
+export const useGetAllUser = (params?: IUser): UseQueryResult<IUserGetAll> => {
   return useQuery(["get-all-user", params], async () => {
     const res = await axios.get(`${endpoints.user.getAll}`, {
       params: { ...params },
@@ -58,8 +58,13 @@ export async function updateUser(params?: Omit<IUser, "id">, id?: number) {
 }
 
 export async function updatePassword(
-  id: number,password: IUserUpdatePassword) {
-  const res = await axios.patch(`${endpoints.user.updatepassword}/${id}`,password);
+  id: number,
+  password: IUserUpdatePassword
+) {
+  const res = await axios.patch(
+    `${endpoints.user.updatepassword}/${id}`,
+    password
+  );
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
