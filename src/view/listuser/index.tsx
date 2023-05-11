@@ -1,4 +1,37 @@
+import {
+  AppstoreOutlined,
+  BarsOutlined,
+  ContactsOutlined,
+  FileExcelFilled,
+  FileExcelTwoTone,
+  UserAddOutlined,
+} from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Col,
+  Form,
+  Row,
+  Segmented,
+  Space,
+  Typography,
+} from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Tab from "../../components/tab";
+import type { ColumnsType } from "antd/es/table";
+import { IItemsTabLayout } from "../../components/tab/tab-interface";
+import FormSearchUser from "../../components/form/search-user";
+import TableLayout from "../../components/table";
+import { IUser, IUserColumnType } from "../../service/api/user/user-interface";
+import { columnsP, columnsU } from "../../components/table/columns-interface";
+import userAPI from "../../service/api/user";
+import FormSearchRole from "../../components/form/search-position";
+import HeadTitle from "../../components/headtitle";
+import { openNotification } from "../../components/notifications";
+import { useForm } from "antd/es/form/Form";
+import scheduleAPI from "../../service/api/schedule";
+import exportExcel from "../../utils/excel";
 
 import { IUser } from "../../service/api/user/user-interface";
 import Table, { ColumnType, ColumnsType } from "antd/es/table";
@@ -7,118 +40,162 @@ import userAPI from "../../service/api/user";
 import { Avatar, Button, Col, Row, Space } from "antd";
 type Props = {};
 export default function ListUser({}: Props) {
-  const [getData, setData] = React.useState<IUser[]>([]);
+  // const [form] = useForm();
+  const [selectTabs, setSelectTabs] = React.useState<String>("1");
   const navigate = useNavigate();
-  const handleEdit = (id: string | number) => {
-    navigate(`/listuser/edit/${id}`);
+  const [userData, setData] = React.useState<Array<IUser>>([]);
+  const [params, setParams] = React.useState<Array<IUser>>([]);
+
+  const handleOnSearch = (values: any) => {
+    console.log("Success:", values);
+    setParams(values);
   };
-  const handleCreate = () => {
-    navigate(`/listuser/create/`);
+
+  const handleOnCancelSearch = () => {};
+
+  const handleOnTabChange = (activeKey: string) => {
+    setSelectTabs(activeKey);
   };
 
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const res = await userAPI.getAllUser();
-        console.log("data", res);
-        setData(res);
-      } catch (err) {
-        // console.log(err);
-      }
-    })();
-  }, []);
+  const handleClickEditUser = (record: object) => {
+    const data = record as IUser;
+    console.log(data);
 
-  const dataTable = getData.map((item, index) => {
-    // console.log("item", item);
+    navigate(`/user-management/edit`, { state: { id: data.id } });
+  };
 
-    return {
-      ...item,
-      key: index,
-    };
-  });
+  const handleClickDeleteUser = async (record: object) => {
+    const data = record as IUser;
+    try {
+      await userAPI.deleteUser(Number(data.id));
+    } catch (err) {
+    } finally {
+      window.location.reload();
+    }
+  };
 
-  const columnUser: ColumnsType<IUser> = [
+  const downloadBlobFileUser = (
+    data: Blob,
+    extension: string,
+    fileName: string = "report report"
+  ) => {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    // console.log(link);
+
+    link.href = url;
+    link.download = "reportuser.xlsx";
+    document.body.appendChild(link);
+    link.click();
+  };
+
+  const handleDownloadExportUser = () => {
+    try {
+      userAPI.exportExcelUser().then((res: Blob) => {
+        console.log("exceluser", res);
+        return downloadBlobFileUser(res, "xlsx", "");
+      });
+    } catch (err) {}
+  };
+
+  const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
+  const columnPosition: ColumnsType<IUserColumnType> = [...columnsP];
+  const items: IItemsTabLayout[] = [
     {
-      title: "Name",
-      render: (_, rc) => {
-        const img = rc.img || "-";
-        const name = rc.name || "-";
-        const email = rc.email || "-";
-        return (
-          <div>
-            <Space align="center" size="middle">
-              <Row>
-                <Col>
-                  {" "}
-                  <Avatar src={img} alt="image-profile" size={50} />
-                </Col>
-                <Col className="ms-5">
-                  <div>{name}</div>
-                  <div>Email: {email}</div>
-                </Col>
-              </Row>
-            </Space>
-          </div>
-        );
+      key: "1",
+      label: "User",
+      children: {
+        search: {
+          item: <FormSearchUser />,
+          onFinish: handleOnSearch,
+          onCancel: handleOnCancelSearch,
+        },
+        table: (
+          <TableLayout
+            title="Table User"
+            id=""
+            columns={columnUser}
+            data={userData}
+            onEdit={handleClickEditUser}
+            onDelete={handleClickDeleteUser}
+          />
+        ),
       },
     },
+
     {
-      title: "Position",
-      render: (_, rc) => {
-        const position = rc?.position?.position || "-";
-        // console.log(position);
-        return <div>{position}</div>;
-      },
-    },
-    {
-      title: "Phone",
-      render: (_, rc) => {
-        const tel = rc?.tel || "-";
-        // console.log(tel);
-        return <div>{tel}</div>;
-      },
-    },
-    {
-      title: "Actions",
-      align: "center",
-      render: (_, rc) => {
-        return (
-          <div className="grid grid-cols-2">
-            <span className="text-center">
-              <button
-                onClick={() => handleEdit(rc.id || "-")}
-                className="text-red-500"
-              >
-                Edit
-              </button>
-            </span>
-            <span className="text-center">
-              <button
-                // onClick={() => handleDelete(rc.id || "-")}
-                className=" text-red-600"
-              >
-                Delete
-              </button>
-            </span>
-          </div>
-        );
+      key: "2",
+      label: "Position",
+      children: {
+        search: {
+          item: <FormSearchRole />,
+          onFinish: handleOnSearch,
+          onCancel: handleOnCancelSearch,
+        },
+        table: (
+          <TableLayout
+            title="Table Role"
+            id=""
+            columns={columnPosition}
+            data={userData}
+            onEdit={handleClickEditUser}
+          />
+        ),
       },
     },
   ];
 
+  const HeadTitleProps = {
+    title: "User Management",
+  };
+
+  const onAdd = async () => {
+    if (selectTabs == "1") {
+      navigate("/user-management/create/user");
+    } else {
+      navigate("/user-management/create/role");
+    }
+  };
+
+  React.useEffect(() => {
+    (async () => {
+      const res = await userAPI.getAllUser(params);
+
+      setData(res.data);
+    })();
+  }, [params]);
+
   return (
-    <div>
-      <div className="">
-        <div>ListUser</div>
+    <React.Fragment>
+      <Row gutter={[12, 12]}>
+        <Col span={24}>
+          <HeadTitle
+            {...HeadTitleProps}
+            onAdd={onAdd}
+            actionName={
+              selectTabs === "1" ? (
+                <Space align="center">
+                  <UserAddOutlined />
+                  <Typography.Text style={{ color: "white", marginBottom: 0 }}>
+                    Add User
+                  </Typography.Text>
+                </Space>
+              ) : (
+                <Space align="center">
+                  {/* <ContactsOutlined /> */}
+                  <Typography.Text style={{ color: "white", marginBottom: 0 }}>
+                    Add Position
+                  </Typography.Text>
+                </Space>
+              )
+            }
+          />
+        </Col>
 
-        <div className="text-end mr-5 mb-2">
-          <Button onClick={() => handleCreate()}>Add</Button>
-        </div>
-      </div>
-
-      <div>
-        <Table columns={columnUser} dataSource={dataTable}></Table>
-      </div>
-    </div>
+        <Col span={24}>
+          <Tab items={items} onChange={handleOnTabChange} />
+        </Col>
+      </Row>
+    </React.Fragment>
   );
 }

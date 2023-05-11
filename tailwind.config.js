@@ -6,8 +6,12 @@ export default {
   "./src/app/**/*.{js,ts,jsx,tsx}"
 ],
   theme: {
+    colors: {
+      themeWhiteContainer: 'var(--theme-white-container-color)'
+    },
     extend: {},
   },
-  plugins: [],
+  plugins: [
+  ],
 }
 

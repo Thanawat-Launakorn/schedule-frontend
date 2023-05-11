@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+:root {
+    --theme-white-container-color: #001529
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+  
+    
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.card-profile {
+  animation: fadeIn 1s;
+}
+
+.logo {
+    height: 80px;
+    width: 100%;
+    background: transparent;
+    animation: fadeIn 1s;
+    transition: all ease-in-out .1s;
+}
+
+.logo-name {
+    animation: fadeInLogo 5s !important;
+    -webkit-animation: fadeInLogo 5s !important;
+    -moz-animation: fadeInLogo 5s !important;
+    -o-animation: fadeInLogo 5s !important;
+    -ms-animation: fadeInLogo 5s !important;
+ 
+}
+
+.ant-layout-sider-children {
+    font-weight: 500;
+
+}
+
+.ant-layout-content {
+  /* padding: 0px 22px; */
+  background: transparent;
+  animation: fadeIn 1.5s;
+}
+
+.ant-layout-sider-children > ul > li {
+
+  margin: 10px auto !important;
+}
+
+.ant-layout-sider-children > ul > li:hover {
+  background-color: #2F58CD !important;
+}
+
+.ant-typography {
+    font-family: 'Quicksand', sans-serif !important;
+}
+
+.ant-card {
+    /* box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; */
+}
+
+.ant-form-large .ant-form-item .ant-form-item-label>label {
+  height: auto;
+}
+.ant-form-item > * > .ant-input{
+  border: 0px !important;
+}
+
+.img-input-icons {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes fadeInLogo {
+    0% {
+      opacity: 0;
+    }
+    100% 
+    {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeInLogo {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-moz-keyframes fadeInLogo {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-webkit-keyframes fadeInLogo {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-o-keyframes fadeInLogo {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-ms-keyframes fadeInLogo {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
