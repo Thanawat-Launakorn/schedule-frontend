@@ -2,6 +2,8 @@ import {
   AppstoreOutlined,
   BarsOutlined,
   ContactsOutlined,
+  FileExcelFilled,
+  FileExcelTwoTone,
   UserAddOutlined,
 } from "@ant-design/icons";
 import {
@@ -23,14 +25,16 @@ import FormSearchUser from "../../components/form/search-user";
 import TableLayout from "../../components/table";
 import { IUser, IUserColumnType } from "../../service/api/user/user-interface";
 import { columnsP, columnsU } from "../../components/table/columns-interface";
-import userAPI from "../../service/api/user";
 import FormSearchRole from "../../components/form/search-position";
 import HeadTitle from "../../components/headtitle";
 import { openNotification } from "../../components/notifications";
 import { useForm } from "antd/es/form/Form";
+import scheduleAPI from "../../service/api/schedule";
+import exportExcel from "../../utils/excel";
 
+import Table, { ColumnType } from "antd/es/table";
+import userAPI from "../../service/api/user";
 type Props = {};
-
 export default function ListUser({}: Props) {
   // const [form] = useForm();
   const [selectTabs, setSelectTabs] = React.useState<String>("1");
@@ -66,6 +70,30 @@ export default function ListUser({}: Props) {
     } finally {
       window.location.reload();
     }
+  };
+
+  const downloadBlobFileUser = (
+    data: Blob,
+    extension: string,
+    fileName: string = "report report"
+  ) => {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    // console.log(link);
+
+    link.href = url;
+    link.download = "reportuser.xlsx";
+    document.body.appendChild(link);
+    link.click();
+  };
+
+  const handleDownloadExportUser = () => {
+    try {
+      userAPI.exportExcelUser().then((res: Blob) => {
+        console.log("exceluser", res);
+        return downloadBlobFileUser(res, "xlsx", "");
+      });
+    } catch (err) {}
   };
 
   const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
@@ -130,10 +158,10 @@ export default function ListUser({}: Props) {
   React.useEffect(() => {
     (async () => {
       const res = await userAPI.getAllUser(params);
+
       setData(res.data);
     })();
   }, [params]);
-  console.log(userData);
 
   return (
     <React.Fragment>
@@ -161,6 +189,7 @@ export default function ListUser({}: Props) {
             }
           />
         </Col>
+
         <Col span={24}>
           <Tab items={items} onChange={handleOnTabChange} />
         </Col>

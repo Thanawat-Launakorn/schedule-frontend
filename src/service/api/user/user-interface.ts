@@ -40,3 +40,9 @@ export interface IUserSearch {
   tel: string;
   status?: string;
 }
+
+export interface IUserUpdatePassword {
+  id: string | number;
+  oldpassword: string;
+  password: string;
+}

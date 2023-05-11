@@ -90,6 +90,7 @@ const Layout = ({ search, table }: ILayout) => {
           </Col>
         </Row>
       </Container>
+
       <Row>
         <Col span={24}>{table}</Col>
       </Row>
