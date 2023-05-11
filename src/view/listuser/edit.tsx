@@ -20,14 +20,13 @@ import {
 import userAPI, { useGetUserByID } from "../../service/api/user";
 import { Image } from "antd";
 import HeadTitle from "../../components/headtitle";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
 import positionAPI from "../../service/api/position";
-
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -39,13 +38,12 @@ const accepts = {
 
 export default function FEditUser({ onAny, disabled }: Props) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = location?.state;
+  const { id } = useParams();
   // console.log(id);
 
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
-  const { data, isLoading } = useGetUserByID(id);
+  const { data, isLoading } = useGetUserByID(Number(id));
   console.log(data);
   const [updatepassword, setpassword] = React.useState(id);
 
@@ -105,19 +103,6 @@ export default function FEditUser({ onAny, disabled }: Props) {
     title: "Edit User",
   };
 
-  const onEditpassword = (values: any) => {
-    console.log(values);
-    // userAPI.updatePassword({
-    //   password: values.password,
-    // });
-  };
-
-  const onFinishEdit = (values: IUserUpdatePassword) => {
-    console.log(values);
-
-    // userAPI.updatePassword()
-  };
-
   const onFinish = (values: IUserPost) => {
     console.log(values);
 
@@ -128,10 +113,10 @@ export default function FEditUser({ onAny, disabled }: Props) {
           name: `${values.firstname} ${values.lastname}`,
           password: values.password,
           img: imageUrl,
-          positionId: values.positionId,
           tel: values.tel,
+          positionId: values.position,
         },
-        id
+        Number(id)
       )
       .then(() => {
         openNotification({ type: "success", title: "success" });

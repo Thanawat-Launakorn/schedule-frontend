@@ -2,6 +2,7 @@ import {
   AppstoreOutlined,
   BarsOutlined,
   ContactsOutlined,
+  ExclamationCircleFilled,
   FileExcelFilled,
   FileExcelTwoTone,
   UserAddOutlined,
@@ -13,6 +14,7 @@ import {
   Form,
   Row,
   Segmented,
+  Modal,
   Space,
   Typography,
 } from "antd";
@@ -40,7 +42,9 @@ export default function ListUser({}: Props) {
   const [selectTabs, setSelectTabs] = React.useState<String>("1");
   const navigate = useNavigate();
   const [userData, setData] = React.useState<Array<IUser>>([]);
-  const [params, setParams] = React.useState<any>({});
+  const [params, setParams] = React.useState<Array<IUser>>([]);
+  const [showWarningModal, setShowWarningModal] =
+    React.useState<boolean>(false);
 
   const handleOnSearch = (values: any) => {
     console.log("Success:", values);
@@ -57,43 +61,43 @@ export default function ListUser({}: Props) {
 
   const handleClickEditUser = (record: object) => {
     const data = record as IUser;
-    console.log(data);
 
-    navigate(`/user-management/edit`, { state: { id: data.id } });
+    navigate(`/user-management/edit/${data.id}`);
   };
 
   const handleClickDeleteUser = async (record: object) => {
-    const data = record as IUser;
-    try {
-      await userAPI.deleteUser(Number(data.id));
-    } catch (err) {
-    } finally {
-      window.location.reload();
-    }
+    // const data = record as IUser;
+    // try {
+    //   // await userAPI.deleteUser(Number(data.id));
+    // } catch (err) {
+    // } finally {
+    //   window.location.reload();
+    // }
+
+    showDeleteConfirm(record);
   };
 
-  const downloadBlobFileUser = (
-    data: Blob,
-    extension: string,
-    fileName: string = "report report"
-  ) => {
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    // console.log(link);
+  const showDeleteConfirm = (user: any) => {
+    Modal.confirm({
+      title: (
+        <>
+          Are u sure delete <span style={{ color: "red" }}>{user.name}</span>
+        </>
+      ),
+      icon: <ExclamationCircleFilled />,
+      content: "It will be deleted permanently. Are u sure? 🥹",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      centered: true,
 
-    link.href = url;
-    link.download = "reportuser.xlsx";
-    document.body.appendChild(link);
-    link.click();
-  };
-
-  const handleDownloadExportUser = () => {
-    try {
-      userAPI.exportExcelUser().then((res: Blob) => {
-        console.log("exceluser", res);
-        return downloadBlobFileUser(res, "xlsx", "");
-      });
-    } catch (err) {}
+      onOk() {
+        console.log("OK");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
