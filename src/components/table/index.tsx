@@ -1,4 +1,9 @@
-import { EditFilled, EyeFilled, DeleteFilled } from "@ant-design/icons";
+import {
+  EditFilled,
+  EyeFilled,
+  DeleteFilled,
+  FileExcelFilled,
+} from "@ant-design/icons";
 import {
   Col,
   Row,
@@ -12,6 +17,7 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
 import { IUser } from "../../service/api/user/user-interface";
+import exportExcel from "../../utils/excel";
 
 type Props = {
   id: string;
@@ -80,12 +86,33 @@ export default function TableLayout({
     <Row>
       <Col span={24}>
         <Row justify="space-between">
-          <Col>
+          <Col span={12}>
             <Typography.Title level={5} style={{ margin: 0, marginBottom: 20 }}>
               {title}
             </Typography.Title>
           </Col>
-          <Col></Col>
+          {title === "Table User" && (
+            <Col span={12} className="text-end">
+              <Typography.Text style={{ fontSize: "16px", color: "green" }}>
+                <FileExcelFilled
+                  onClick={exportExcel.handleDownloadExportUser}
+                  style={{ fontSize: "28px", color: "green" }}
+                />
+                user
+              </Typography.Text>
+            </Col>
+          )}
+          {title === "Table Role" && (
+            <Col>
+              <Typography.Text style={{ fontSize: "16px", color: "green" }}>
+                <FileExcelFilled
+                  onClick={exportExcel.handleDownloadExportSchedule}
+                  style={{ fontSize: "28px", color: "green" }}
+                />
+                schedule
+              </Typography.Text>
+            </Col>
+          )}
         </Row>
       </Col>
       <Col span={24}>

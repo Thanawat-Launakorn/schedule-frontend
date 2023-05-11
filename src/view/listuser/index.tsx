@@ -2,6 +2,8 @@ import {
   AppstoreOutlined,
   BarsOutlined,
   ContactsOutlined,
+  FileExcelFilled,
+  FileExcelTwoTone,
   UserAddOutlined,
 } from "@ant-design/icons";
 import {
@@ -28,6 +30,8 @@ import FormSearchRole from "../../components/form/search-position";
 import HeadTitle from "../../components/headtitle";
 import { openNotification } from "../../components/notifications";
 import { useForm } from "antd/es/form/Form";
+import scheduleAPI from "../../service/api/schedule";
+import exportExcel from "../../utils/excel";
 
 type Props = {};
 
@@ -64,6 +68,30 @@ export default function ListUser({}: Props) {
     } finally {
       window.location.reload();
     }
+  };
+
+  const downloadBlobFileUser = (
+    data: Blob,
+    extension: string,
+    fileName: string = "report report"
+  ) => {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    // console.log(link);
+
+    link.href = url;
+    link.download = "reportuser.xlsx";
+    document.body.appendChild(link);
+    link.click();
+  };
+
+  const handleDownloadExportUser = () => {
+    try {
+      userAPI.exportExcelUser().then((res: Blob) => {
+        console.log("exceluser", res);
+        return downloadBlobFileUser(res, "xlsx", "");
+      });
+    } catch (err) {}
   };
 
   const columnUser: ColumnsType<IUserColumnType> = [...columnsU];
@@ -129,7 +157,7 @@ export default function ListUser({}: Props) {
     (async () => {
       const res = await userAPI.getAllUser(params);
 
-      setData(res);
+      setData(res.data);
     })();
   }, [params]);
 
@@ -159,6 +187,7 @@ export default function ListUser({}: Props) {
             }
           />
         </Col>
+
         <Col span={24}>
           <Tab items={items} onChange={handleOnTabChange} />
         </Col>

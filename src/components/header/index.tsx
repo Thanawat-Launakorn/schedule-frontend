@@ -27,6 +27,7 @@ import { IProfile } from "../../service/api/auth/auth-interface";
 import GetPosition from "../../utils/position";
 import Container from "../container";
 import TextArea from "antd/es/input/TextArea";
+import userAPI from "../../service/api/user";
 
 type Props = {
   collapsed: boolean;
@@ -35,8 +36,11 @@ type Props = {
 
 export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const [getData, setData] = React.useState({} as Partial<IProfile>);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editPass, setEditpass] = React.useState(false);
+  const [updatePass, setPass] = React.useState();
   const {
     token: { colorTextLabel, colorPrimary },
   } = theme.useToken();
@@ -49,19 +53,22 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   };
 
   const handleOk = async () => {
-    setTimeout(() => {
-      setIsModalOpen(false);
-    }, 1000);
+    form.submit()
+    // setTimeout(() => {
+    //   setIsModalOpen(false);
+    // }, 1000);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const signout = () => {
     localStorage.clear();
     navigate("/login");
     window.location.reload();
   };
+  console.log(getData?.id);
 
   const getProfile = async () => {
     await authAPI
@@ -76,8 +83,27 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
       .catch((err) => alert(err));
   };
 
+  const initialData = () => {
+    form.setFieldsValue({
+      firstname: getData.firstName,
+      lastname: getData.lastName,
+      email: getData.email,
+      tel: getData.tel,
+      position: `${GetPosition(getData.positionId)}`,
+    });
+  };
+
+  const onFinishModal = (values: any) => {
+    // console.log(values);
+    const id = getData.id
+    userAPI.updateUser(values,id)
+    
+    
+  }
+
   React.useEffect(() => {
     getProfile();
+    initialData();
   }, []);
   const titleStyle = {
     fontSize: 12,
@@ -122,7 +148,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
         onCancel={handleCancel}
         closeIcon={<CloseCircleOutlined />}
       >
-        <Form layout="vertical">
+        <Form layout="vertical" form={form} onFinish={onFinishModal}>
           <Row gutter={[24, 20]}>
             <Col span={24}>
               <Row justify="space-between">
@@ -195,50 +221,87 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                       <Col span={24} style={{ marginBottom: 2.5 }}>
                         <Row gutter={[12, 12]}>
                           <Col span={12}>
-                            <Form.Item label="Firstname">
-                              <Input value={getData.firstName} />
-                            </Form.Item>
-                          </Col>
-                          <Col span={12}>
-                            <Form.Item label="Lastname">
-                              <Input
-                                value={getData.lastName}
-                                disabled={!getData.lastName}
-                              />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col span={24} style={{ marginBottom: 2.5 }}>
-                        <Row gutter={[12, 12]}>
-                          <Col span={12}>
-                            <Form.Item label="Email">
-                              <Input value={getData.email} />
-                            </Form.Item>
-                          </Col>
-                          <Col span={12}>
-                            <Form.Item label="Telephone: (123-456-7890)">
-                              <Input value={getData.tel} />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col span={24} style={{ marginBottom: 2.5 }}>
-                        <Row gutter={[12, 12]}>
-                          <Col span={12}>
-                            <Form.Item label="Address">
+                            <Form.Item label="Firstname" name="firstname">
                               <Input />
                             </Form.Item>
                           </Col>
                           <Col span={12}>
-                            <Form.Item label="Position">
-                              <Input
-                                value={`${GetPosition(getData.positionId)}`}
-                                disabled
-                              />
+                            <Form.Item label="Lastname" name="lastname">
+                              <Input disabled={!getData.lastName} />
                             </Form.Item>
                           </Col>
                         </Row>
+                      </Col>
+                      <Col span={24} style={{ marginBottom: 2.5 }}>
+                        <Row gutter={[12, 12]}>
+                          <Col span={12}>
+                            <Form.Item label="Email" name="email">
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item
+                              label="Telephone: (123-456-7890)"
+                              name="tel"
+                            >
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col span={24} style={{ marginBottom: 2.5 }}>
+                        <Row gutter={[12, 12]}>
+                          <Col span={12}>
+                            <Form.Item label="Address" name="address">
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item label="Position" name="position">
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col span={24}>
+                        <Button
+                          onClick={() => setEditpass((prevState) => !prevState)}
+                        >
+                          edit password
+                        </Button>
+                        {editPass && (
+                          <>
+                            <Row gutter={[12, 12]}>
+                              <Col span={12}>
+                                <Form.Item
+                                  label="Oldpassword"
+                                  name="oldpassword"
+                                >
+                                  <Input.Password placeholder="Oldpassword"></Input.Password>
+                                </Form.Item>
+                              </Col>
+                              <Col span={12}>
+                                <Form.Item
+                                  label="Newpassword"
+                                  name="newpassword"
+                                >
+                                  <Input.Password placeholder="Newpassword"></Input.Password>
+                                </Form.Item>
+                              </Col>
+                              {/* <Col>
+                                <Form.Item>
+                                  <Button
+                                    htmlType="submit"
+                                    onClick={handleEditpass}
+                                    type="primary"
+                                  >
+                                    Submit
+                                  </Button>
+                                </Form.Item>
+                              </Col> */}
+                            </Row>
+                          </>
+                        )}
                       </Col>
                     </Row>
                   </Container>
@@ -278,7 +341,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                 </Col>
                 <Col span={16}>
                   {/* About me */}
-                  <Container>
+                  {/* <Container>
                     <Row gutter={[12, 12]}>
                       <Col span={24}>
                         <Typography.Title level={5}>About me</Typography.Title>
@@ -290,7 +353,9 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                         </Form.Item>
                       </Col>
                     </Row>
-                  </Container>
+                  </Container> */}
+
+                  {/* edit password */}
                 </Col>
               </Row>
             </Col>

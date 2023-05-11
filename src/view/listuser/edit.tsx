@@ -12,7 +12,11 @@ import {
 } from "antd";
 import Container from "../../components/container";
 import React from "react";
-import { IUser, IUserPost } from "../../service/api/user/user-interface";
+import {
+  IUser,
+  IUserPost,
+  IUserUpdatePassword,
+} from "../../service/api/user/user-interface";
 import userAPI, { useGetUserByID } from "../../service/api/user";
 import { Image } from "antd";
 import HeadTitle from "../../components/headtitle";
@@ -37,14 +41,17 @@ export default function FEditUser({ onAny, disabled }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = location?.state;
+  // console.log(id);
 
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const { data, isLoading } = useGetUserByID(id);
   console.log(data);
+  const [updatepassword, setpassword] = React.useState(id);
 
   const [initialValues, setValues] = React.useState({} as IUser);
   const [getPosition, setPosition] = React.useState<Array<IPosition>>([]);
+  const [update, setUpdatePassword] = React.useState<string>();
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
   const handleChange: UploadProps["onChange"] = async (
@@ -96,6 +103,19 @@ export default function FEditUser({ onAny, disabled }: Props) {
   };
   const HeadTitleProps = {
     title: "Edit User",
+  };
+
+  const onEditpassword = (values: any) => {
+    console.log(values);
+    // userAPI.updatePassword({
+    //   password: values.password,
+    // });
+  };
+
+  const onFinishEdit = (values: IUserUpdatePassword) => {
+    console.log(values);
+
+    // userAPI.updatePassword()
   };
 
   const onFinish = (values: IUserPost) => {
@@ -320,10 +340,11 @@ export default function FEditUser({ onAny, disabled }: Props) {
                 {/* Password */}
                 <Container>
                   <Row gutter={[0, 0]}>
-                    <Col span={24}>
+                    <Col span={24} className="">
                       <Typography.Title level={5}>Password</Typography.Title>
                       <Divider />
                     </Col>
+
                     <Col span={24}>
                       <Row gutter={[12, 0]}>
                         <Col span={12}>
@@ -340,6 +361,7 @@ export default function FEditUser({ onAny, disabled }: Props) {
                             <Input.Password type="password" disabled />
                           </Form.Item>
                         </Col>
+
                         <Col span={12}>
                           <Form.Item
                             label="Confirm password"

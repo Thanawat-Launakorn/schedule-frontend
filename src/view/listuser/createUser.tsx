@@ -23,7 +23,7 @@ import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
-import positionAPI, { useGetPosition } from "../../service/api/position";
+import positionAPI, {  } from "../../service/api/position";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;

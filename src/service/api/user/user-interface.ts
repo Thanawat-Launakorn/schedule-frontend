@@ -28,3 +28,9 @@ export interface IUserColumnType extends Omit<IUser, "password"> {
   lastName: string;
   positionId: number;
 }
+
+export interface IUserUpdatePassword {
+  id: string | number;
+  oldpassword: string;
+  password: string;
+}

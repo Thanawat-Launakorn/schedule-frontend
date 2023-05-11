@@ -20,10 +20,20 @@ export async function getScheduleById(date?: string) {
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
+export async function exportExcelSchedule() {
+  const res = await axios.post(
+    `${endpoints.excel.schedule}`,
+    {},
+    { responseType: "blob" }
+  );
+  return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
+}
+
 export const scheduleAPI = {
   createSchedule,
   getSchedule,
   getScheduleById,
+  exportExcelSchedule,
 };
 
 export default scheduleAPI;
