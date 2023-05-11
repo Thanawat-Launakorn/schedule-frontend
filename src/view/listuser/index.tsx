@@ -25,7 +25,6 @@ import FormSearchUser from "../../components/form/search-user";
 import TableLayout from "../../components/table";
 import { IUser, IUserColumnType } from "../../service/api/user/user-interface";
 import { columnsP, columnsU } from "../../components/table/columns-interface";
-import userAPI from "../../service/api/user";
 import FormSearchRole from "../../components/form/search-position";
 import HeadTitle from "../../components/headtitle";
 import { openNotification } from "../../components/notifications";
@@ -33,11 +32,8 @@ import { useForm } from "antd/es/form/Form";
 import scheduleAPI from "../../service/api/schedule";
 import exportExcel from "../../utils/excel";
 
-import { IUser } from "../../service/api/user/user-interface";
-import Table, { ColumnType, ColumnsType } from "antd/es/table";
-import { useNavigate } from "react-router-dom";
+import Table, { ColumnType } from "antd/es/table";
 import userAPI from "../../service/api/user";
-import { Avatar, Button, Col, Row, Space } from "antd";
 type Props = {};
 export default function ListUser({}: Props) {
   // const [form] = useForm();
