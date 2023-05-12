@@ -9,6 +9,7 @@ type Props = {
   onCancel?: VoidFunction | false;
   onSubmit?: VoidFunction | false;
   onAdd?: VoidFunction | false;
+  onExcel?: VoidFunction | false;
   action?: React.ReactElement;
 };
 
@@ -17,6 +18,7 @@ export default function HeadTitle({
   onAdd,
   onCancel,
   onSubmit,
+  onExcel,
   action,
   actionName,
   children,
@@ -75,6 +77,11 @@ export default function HeadTitle({
                 type="primary"
                 onClick={onAdd}
               >
+                {actionName}
+              </Button>
+            )}
+            {!!onExcel && (
+              <Button style={{ width: 120, height: 48 }} onClick={onExcel}>
                 {actionName}
               </Button>
             )}

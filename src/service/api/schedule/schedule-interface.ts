@@ -1,6 +1,6 @@
 export interface ISchedulePost {
   calendar: string;
-  users: Array<number>;
+  user: Array<number>;
   dopay: string;
   howmuch?: number;
 }

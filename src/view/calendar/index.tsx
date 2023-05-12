@@ -32,6 +32,7 @@ import {
   AntDesignOutlined,
   EditOutlined,
   DeleteOutlined,
+  CloudUploadOutlined,
 } from "@ant-design/icons";
 import {
   IScheduleGetAll,
@@ -143,7 +144,7 @@ export default function AppCalendar({}: Props) {
   const onFinish = (values: any) => {
     const post = {
       calendar: date,
-      users: values.user?.map((e: number) => {
+      user: values.user?.map((e: number) => {
         return e;
       }),
       dopay: values.dopay || "Do",
@@ -169,6 +170,9 @@ export default function AppCalendar({}: Props) {
       })
       .catch((res) => {
         openNotification({ type: "error", title: `${res.message} ❌` });
+      })
+      .finally(() => {
+        window.location.reload();
       });
   };
 
@@ -275,6 +279,8 @@ export default function AppCalendar({}: Props) {
     },
   ];
 
+  const onExcel = () => {};
+
   React.useEffect(() => {
     (async () => {
       try {
@@ -290,7 +296,22 @@ export default function AppCalendar({}: Props) {
     <>
       <Row>
         <Col>
-          <HeadTitle {...HeadTitleProps} />
+          <HeadTitle
+            {...HeadTitleProps}
+            actionName={
+              <Space>
+                <Row align="middle" justify="space-between">
+                  <Col>
+                    <CloudUploadOutlined className="text-lg" />
+                  </Col>
+                  <Col>
+                    <Typography.Title level={5}>Import</Typography.Title>
+                  </Col>
+                </Row>
+              </Space>
+            }
+            onExcel={onExcel}
+          />
         </Col>
         <Col>
           <Calendar
