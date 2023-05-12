@@ -36,7 +36,7 @@ type Props = {
 
 export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  const [modalProfile] = Form.useForm();
   const [getData, setData] = React.useState({} as Partial<IProfile>);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [editPass, setEditpass] = React.useState(false);
@@ -45,22 +45,21 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
     token: { colorTextLabel, colorPrimary },
   } = theme.useToken();
 
-  const [componentDisabled, setComponentDisabled] =
-    React.useState<boolean>(true);
-
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = async () => {
-    form.submit()
+    modalProfile.submit();
     // setTimeout(() => {
     //   setIsModalOpen(false);
     // }, 1000);
+    setEditpass(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setEditpass(false);
   };
 
   const signout = () => {
@@ -84,7 +83,8 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   };
 
   const initialData = () => {
-    form.setFieldsValue({
+    if (!getData) return;
+    modalProfile.setFieldsValue({
       firstname: getData.firstName,
       lastname: getData.lastName,
       email: getData.email,
@@ -95,16 +95,10 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
 
   const onFinishModal = (values: any) => {
     // console.log(values);
-    const id = getData.id
-    userAPI.updateUser(values,id)
-    
-    
-  }
+    const id = getData.id;
+    // userAPI.updateUser(values, id);
+  };
 
-  React.useEffect(() => {
-    getProfile();
-    initialData();
-  }, []);
   const titleStyle = {
     fontSize: 12,
     fontWeight: "bold",
@@ -131,6 +125,11 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
     },
   ];
 
+  React.useEffect(() => {
+    getProfile();
+    initialData();
+  }, []);
+
   return (
     <Layout.Header
       style={{ padding: 0, background: "white", height: 80 }}
@@ -148,7 +147,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
         onCancel={handleCancel}
         closeIcon={<CloseCircleOutlined />}
       >
-        <Form layout="vertical" form={form} onFinish={onFinishModal}>
+        <Form layout="vertical" form={modalProfile} onFinish={onFinishModal}>
           <Row gutter={[24, 20]}>
             <Col span={24}>
               <Row justify="space-between">
@@ -168,7 +167,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
             <Col span={24}>
               <Row gutter={[12, 12]}>
                 <Col span={8}>
-                  <Container className="!bg-themeWhiteContainer">
+                  <Container className="!bg-themeWhiteContainer !h-[440px]">
                     <center>
                       <Space direction="vertical">
                         <Avatar
@@ -266,8 +265,12 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                       <Col span={24}>
                         <Button
                           onClick={() => setEditpass((prevState) => !prevState)}
+                          style={{
+                            display: editPass ? "none" : "block",
+                          }}
+                          type="primary"
                         >
-                          edit password
+                          Edit password
                         </Button>
                         {editPass && (
                           <>
@@ -341,7 +344,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                 </Col>
                 <Col span={16}>
                   {/* About me */}
-                  {/* <Container>
+                  <Container>
                     <Row gutter={[12, 12]}>
                       <Col span={24}>
                         <Typography.Title level={5}>About me</Typography.Title>
@@ -353,9 +356,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                         </Form.Item>
                       </Col>
                     </Row>
-                  </Container> */}
-
-                  {/* edit password */}
+                  </Container>
                 </Col>
               </Row>
             </Col>

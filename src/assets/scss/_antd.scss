@@ -1,0 +1,50 @@
+.ant-layout-sider-children {
+    font-weight: 500;
+
+}
+
+.ant-layout-content {
+  /* padding: 0px 22px; */
+  background: transparent;
+  animation: fadeIn 1.5s;
+}
+
+.ant-layout-sider-children > ul > li {
+
+  margin: 10px auto !important;
+}
+
+.ant-layout-sider-children > ul > li:hover {
+  background-color: #2F58CD !important;
+}
+
+.ant-typography {
+    font-family: 'Quicksand', sans-serif !important;
+}
+
+.ant-card {
+    // box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; 
+}
+
+.ant-form-large .ant-form-item .ant-form-item-label>label {
+  height: auto;
+}
+.ant-form-item > * > .ant-input{
+  border: 0px !important;
+}
+
+.ant-input {
+    border-radius: 0 !important;
+}
+
+.ant-input-password {
+    border-radius: 0 !important;
+
+}
+
+:where(.css-dev-only-do-not-override-16s46n3).ant-picker,
+:where(.css-dev-only-do-not-override-16s46n3).ant-input,
+:where(.css-dev-only-do-not-override-16s46n3).ant-input-affix-wrapper,
+:where(.css-dev-only-do-not-override-16s46n3).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border: 0px !important;
+}

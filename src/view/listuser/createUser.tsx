@@ -23,7 +23,7 @@ import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
-import positionAPI, {  } from "../../service/api/position";
+import positionAPI from "../../service/api/position";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -100,7 +100,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
         name: `${values.firstname} ${values.lastname}`,
         password: values.password,
         img: imageUrl,
-        position: values.position,
+        positionId: values.positionId,
         tel: values.tel,
       })
       .then(() => {

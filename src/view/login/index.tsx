@@ -4,6 +4,7 @@ import { ISignin } from "../../service/api/auth/auth-interface";
 import authAPI from "../../service/api/auth";
 import { useNavigate } from "react-router-dom";
 import { openNotification } from "../../components/notifications";
+import calendar from "../../assets/images/calendar.png";
 type Props = {};
 
 export default function Signin({}: Props) {
@@ -35,7 +36,13 @@ export default function Signin({}: Props) {
   return (
     <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
       <Col span={6}>
-        <div className="center">Singin</div>
+        <div className="center">
+          <img
+            src={calendar}
+            alt="image-logo"
+            className="w-16 h-16 object-cover"
+          />
+        </div>
         <Typography.Title level={5} style={{ color: "#ffffff" }}>
           เข้าสู่ระบบบัญชีของคุณเพื่อดำเนินการต่อ
         </Typography.Title>

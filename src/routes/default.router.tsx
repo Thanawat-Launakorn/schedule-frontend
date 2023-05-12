@@ -20,7 +20,7 @@ export const user = [
   { path: "/user-management", element: <ListUser />, key: 2 },
   { path: "/user-management/create/user", element: <CreateUser /> },
   { path: "/user-management/create/role", element: <CreateRole /> },
-  { path: "/user-management/edit", element: <EditUser /> },
+  { path: "/user-management/edit/:id", element: <EditUser /> },
 ];
 
 export const calendar = [

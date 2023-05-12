@@ -1,8 +1,8 @@
 export interface ISchedulePost {
   calendar: string;
-  user: number;
+  users: Array<number>;
   dopay: string;
-  howmuch: number;
+  howmuch?: number;
 }
 
 export interface IScheduleRandom {

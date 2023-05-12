@@ -88,60 +88,7 @@ export const columnsP: ColumnsType<IUserColumnType> = [
     render: (_: any, record: IUserColumnType) => {
       return (
         <Row>
-          <div>{`${GetPosition(record.positionId)}`}</div>
-        </Row>
-      );
-    },
-  },
-];
-
-export const columnModalU: ColumnsType<IUserColumnType> = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    width: "15%",
-
-    render: (_: any, record: IUserColumnType) => {
-      return (
-        <Row align="middle">
-          <Col style={{ marginRight: 10 }}>
-            <Avatar src={record.img} alt="image-profile" size="large" />
-          </Col>
-          <Col>
-            <Typography.Title level={5} style={{ margin: 0, color: "#2F58CD" }}>
-              {`${record.name}`}
-            </Typography.Title>
-            <Typography.Text>{`${record.email}`}</Typography.Text>
-          </Col>
-        </Row>
-      );
-    },
-  },
-
-  {
-    title: "Telephone",
-    key: "phoneNumber",
-    dataIndex: "phoneNumber",
-    width: "15%",
-    render: (_: any, record: IUserColumnType) => {
-      return (
-        <Row>
-          <div>{`${record.tel}`}</div>
-        </Row>
-      );
-    },
-  },
-
-  {
-    title: "Position",
-    key: "position",
-    dataIndex: "position",
-    width: "15%",
-    render: (_: any, record: IUserColumnType) => {
-      return (
-        <Row>
-          <div>{`${GetPosition(record.positionId)}`}</div>
+          <div>{`${record.position.position}`}</div>
         </Row>
       );
     },
