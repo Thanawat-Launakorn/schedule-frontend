@@ -9,7 +9,7 @@ export default function AppContent({ children }: Props) {
   const isFetching = useIsFetching();
   return (
     <Spin
-      style={{ background: "rgba(0, 0, 0, 0.05)", minHeight: "100%" }}
+      style={{ background: "rgba(0, 0, 0, .01)", minHeight: "100%" }}
       spinning={isFetching ? true : false}
       size="large"
       tip="กำลังโหลด..."

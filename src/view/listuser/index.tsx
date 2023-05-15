@@ -90,11 +90,27 @@ export default function ListUser({}: Props) {
       centered: true,
 
       onOk() {
-        console.log("OK");
+        userAPI
+          .deleteUser(user.id)
+          .then(() => {
+            openNotification({
+              type: "success",
+              title: "Delete user success ✅",
+            });
+          })
+          .catch((err) => {
+            openNotification({
+              type: "error",
+              title: "Cannot delete user ❌",
+            });
+          })
+          .finally(() => {
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          });
       },
-      onCancel() {
-        console.log("Cancel");
-      },
+      onCancel() {},
     });
   };
 

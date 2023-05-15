@@ -15,7 +15,6 @@ export default function Signin({}: Props) {
         password: value.password,
       })
       .then((res) => {
-        console.log("res", res); //backend ส่ง access_token
         localStorage.setItem("token", res.accessToken);
         openNotification({ type: "success", title: "success" });
       })

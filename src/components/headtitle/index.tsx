@@ -10,6 +10,7 @@ type Props = {
   onSubmit?: VoidFunction | false;
   onAdd?: VoidFunction | false;
   action?: React.ReactElement;
+  className?: string;
 };
 
 export default function HeadTitle({
@@ -20,6 +21,7 @@ export default function HeadTitle({
   action,
   actionName,
   children,
+  className,
 }: Props) {
   const {
     token: { colorTextLabel, colorPrimary },
@@ -27,6 +29,7 @@ export default function HeadTitle({
 
   return (
     <Row
+      className={`!mb-5 ${className}`}
       justify="space-between"
       align="middle"
       style={{
