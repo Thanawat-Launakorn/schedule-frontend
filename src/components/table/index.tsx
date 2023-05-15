@@ -96,16 +96,14 @@ export default function TableLayout({
           </Col>
           {title === "Table User" && (
             <Col span={12} className="text-end">
-              <Button className="w-28">
+              <Button
+                className="w-28"
+                onClick={exportExcel.handleDownloadExportUser}
+              >
                 <Row align="middle" justify="space-between">
                   <CloudUploadOutlined className="text-lg" />
-
-                  <FileExcelFilled
-                    onClick={exportExcel.handleDownloadExportUser}
-                    style={{ display: "none" }}
-                  />
                   <Typography.Title level={5} style={{ margin: 0 }}>
-                    import
+                    export
                   </Typography.Title>
                 </Row>
               </Button>

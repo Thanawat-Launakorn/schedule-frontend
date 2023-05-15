@@ -100,7 +100,7 @@ export default function FCreateUser({ onAny, disabled }: Props) {
         name: `${values.firstname} ${values.lastname}`,
         password: values.password,
         img: imageUrl,
-        positionId: values.positionId,
+        positionId: values.position,
         tel: values.tel,
       })
       .then(() => {

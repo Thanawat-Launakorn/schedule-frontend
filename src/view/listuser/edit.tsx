@@ -26,7 +26,7 @@ import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
-import positionAPI from "../../service/api/position";
+import positionAPI, { useGetAllPosition } from "../../service/api/position";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -39,19 +39,13 @@ const accepts = {
 export default function FEditUser({ onAny, disabled }: Props) {
   const navigate = useNavigate();
   const { id } = useParams();
-  // console.log(id);
-
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
-  const { data, isLoading } = useGetUserByID(Number(id));
-  console.log(data);
-  const [updatepassword, setpassword] = React.useState(id);
-
-  const [initialValues, setValues] = React.useState({} as IUser);
-  const [getPosition, setPosition] = React.useState<Array<IPosition>>([]);
-  const [update, setUpdatePassword] = React.useState<string>();
+  const { data: userDataById, isLoading } = useGetUserByID(Number(id));
+  const { data: allPosition } = useGetAllPosition();
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
+
   const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
   ) => {
@@ -76,7 +70,6 @@ export default function FEditUser({ onAny, disabled }: Props) {
           uploadMedia();
         }, 2000);
         setImageUrl(base64);
-        console.log("success");
       } catch (err: any) {
         openNotification({
           type: "error",
@@ -111,10 +104,9 @@ export default function FEditUser({ onAny, disabled }: Props) {
         {
           email: values.email,
           name: `${values.firstname} ${values.lastname}`,
-          password: values.password,
           img: imageUrl,
           tel: values.tel,
-          positionId: values.position,
+          position: values.position,
         },
         Number(id)
       )
@@ -128,28 +120,25 @@ export default function FEditUser({ onAny, disabled }: Props) {
       .finally(() => navigate("/user-management"));
   };
 
-  React.useEffect(() => {
-    (async () => {
-      const resPosition = await positionAPI.getAllPosition();
-
-      setPosition(resPosition);
-    })();
-  }, []);
-
-  React.useEffect(() => {
-    setImageUrl(data?.img);
-    initialData();
-  }, [data]);
-
   const initialData = () => {
-    if (!data) return;
+    if (!userDataById) return;
 
     form.setFieldsValue({
-      ...data,
-      firstname: data.name.split(" ")[0],
-      lastname: data.name.split(" ")[1],
+      ...userDataById,
+      firstname: userDataById.name.split(" ")[0],
+      lastname: userDataById.name.split(" ")[1],
+      position: allPosition
+        ?.filter((e) => e.id === userDataById?.positionId)
+        .map((e) => e.position),
     });
   };
+
+  React.useEffect(() => {
+    setImageUrl(userDataById?.img);
+    window.scrollTo(0, 0);
+
+    initialData();
+  }, [userDataById]);
 
   return (
     <>
@@ -231,8 +220,7 @@ export default function FEditUser({ onAny, disabled }: Props) {
                     <Col span={24}>
                       <Form.Item name="position">
                         <Select
-                          defaultValue={"Select position..."}
-                          options={getPosition.map((it) => {
+                          options={allPosition?.map((it) => {
                             return { value: it.id, label: it.position };
                           })}
                           style={{

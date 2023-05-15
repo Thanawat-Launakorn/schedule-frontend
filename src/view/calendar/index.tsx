@@ -5,58 +5,59 @@ import {
   Col,
   Form,
   Modal,
-  notification,
   Row,
   Select,
   SelectProps,
   Space,
-  Tooltip,
   Typography,
   Popover,
   Divider,
 } from "antd";
+import type { TableRowSelection } from "antd/es/table/interface";
 import dayjs, { Dayjs } from "dayjs";
 
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
-import userAPI, { useGetAllUser } from "../../service/api/user";
+import userAPI from "../../service/api/user";
 import { IUser, IUserColumnType } from "../../service/api/user/user-interface";
-import scheduleAPI, { useGetSchedule } from "../../service/api/schedule";
+import scheduleAPI from "../../service/api/schedule";
 import { openNotification } from "../../components/notifications";
-import FormItem from "antd/es/form/FormItem";
-import { useForm } from "antd/es/form/Form";
-import { CellEllipsisType } from "rc-table/lib/interface";
 import { useNavigate } from "react-router-dom";
 import type { CellRenderInfo } from "rc-picker/lib/interface";
 import {
-  UserOutlined,
-  AntDesignOutlined,
   EditOutlined,
   DeleteOutlined,
-  CloudUploadOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
-import {
-  IScheduleGetAll,
-  ISchedulePost,
-} from "../../service/api/schedule/schedule-interface";
+import { IScheduleGetAll } from "../../service/api/schedule/schedule-interface";
 import Table, { ColumnsType } from "antd/es/table";
 import HeadTitle from "../../components/headtitle";
-import { useGetAllPosition } from "../../service/api/position";
 import GetPosition from "../../utils/position";
-
+import { useQueryClient } from "react-query";
 type Props = {};
 
 export default function AppCalendar({}: Props) {
+  const queryClient = useQueryClient();
   const [modalForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const navigate = useNavigate();
-  // const { data: scheduleData } = useGetSchedule();
+  const { data: scheduleData } = scheduleAPI.useGetSchedule();
   const { data: userData } = userAPI.useGetAllUser();
+
   const [changeModal, setChangeModal] = React.useState(false);
-  const [getSchedule, setSchedule] = React.useState([]);
   const [select, setSelect] = React.useState<Array<any>>([]);
   const [date, setDate] = React.useState<string>("");
-  // console.log(getSchedule);
+  const [onAddOpen, setAddOpen] = React.useState<boolean>(false);
+  const post_schedule = scheduleAPI.useCreateSchedule();
+  const delete_scheduleTask = scheduleAPI.useScheduleDeleteTaskById();
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>([]);
+  interface DataType {
+    key: React.Key;
+  }
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log(selectedRowKeys.map((e) => e));
 
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
   // Modal
   const showModal = () => {
     setIsModalOpen(true);
@@ -64,7 +65,7 @@ export default function AppCalendar({}: Props) {
 
   const handleOk = () => {
     setIsModalOpen(false);
-    modalForm.submit();
+    setAddOpen(false);
   };
 
   const handleCancel = () => {
@@ -80,13 +81,13 @@ export default function AppCalendar({}: Props) {
     const dateInput = value.format("YYYY-MM-DD");
     console.log(dateInput);
 
-    const checkUser: boolean = getSchedule.some(
+    if (!scheduleData) return;
+    const checkUser: boolean = scheduleData.some(
       (e: any) => e.calendar.date === dateInput
     );
-    // console.log(checkUser);
 
     setSelect(
-      getSchedule.filter((user: any) => {
+      scheduleData.filter((user: any) => {
         return user.calendar.date === dateInput;
       })
     );
@@ -95,10 +96,6 @@ export default function AppCalendar({}: Props) {
 
     setDate(dateInput);
     showModal();
-  };
-
-  const handleChange = (e: any) => {
-    console.log(e.id);
   };
 
   const options: SelectProps["options"] = userData?.data?.map((e: IUser) => {
@@ -111,11 +108,12 @@ export default function AppCalendar({}: Props) {
   };
 
   const dateCellRender = (date: Dayjs): React.ReactNode => {
-    const booking = getSchedule.filter((e: any) => {
+    if (!scheduleData) return;
+    const booking = scheduleData.filter((e: any) => {
       const renderDate = dayjs(date).format("YYYY-MM-DD");
       const dateCalendar = dayjs(e.calendar.date).format("YYYY-MM-DD");
 
-      return dateCalendar === renderDate; //ข้อมูลในวันที่
+      return dateCalendar === renderDate;
     });
 
     return (
@@ -141,43 +139,70 @@ export default function AppCalendar({}: Props) {
     );
   };
 
-  const onFinish = (values: any) => {
+  const onFinishModal = (values: any) => {
     const post = {
       calendar: date,
-      user: values.user?.map((e: number) => {
+      user: values?.user?.map((e: number) => {
         return e;
       }),
-      dopay: values.dopay || "Do",
-      howmuch: values.howmuch || 0,
+      dopay: values?.dopay || "Do",
+      howmuch: values?.howmuch || 0,
     };
 
-    console.log("post", post);
+    if (!values?.user) return;
 
-    // scheduleAPI.useCreateSchedule().mutate(post, {
-    //   onSuccess: () => {
-    //     openNotification({ type: "success", title: "success ✅" });
-    //   },
-
-    //   onError: () => {
-    //     openNotification({ type: "error", title: "error ❌" });
-    //   },
-    // });
-
-    scheduleAPI
-      .createSchedule(post)
-      .then(() => {
+    post_schedule.mutate(post, {
+      onSuccess: () => {
         openNotification({ type: "success", title: "success ✅" });
-      })
-      .catch((res) => {
-        openNotification({ type: "error", title: `${res.message} ❌` });
-      })
-      .finally(() => {
-        window.location.reload();
-      });
+        queryClient.invalidateQueries({ queryKey: ["get-schedule"] });
+        handleOk();
+      },
+
+      onError: () => {
+        openNotification({ type: "error", title: "error ❌" });
+      },
+    });
   };
 
   const HeadTitleProps = {
     title: "Calendar",
+  };
+
+  const rowSelection: TableRowSelection<DataType> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_NONE,
+      {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changeableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changeableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
   };
 
   const columnModal: ColumnsType<IUserColumnType> = [
@@ -185,7 +210,7 @@ export default function AppCalendar({}: Props) {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "15%",
+      width: "40%",
 
       render: (_: any, record: any) => {
         return (
@@ -211,7 +236,7 @@ export default function AppCalendar({}: Props) {
       title: "Telephone",
       key: "phoneNumber",
       dataIndex: "phoneNumber",
-      width: "15%",
+      width: "30%",
       render: (_: any, record: any) => {
         return (
           <Row>
@@ -225,7 +250,7 @@ export default function AppCalendar({}: Props) {
       title: "Position",
       key: "position",
       dataIndex: "position",
-      width: "15%",
+      width: "30%",
       render: (_: any, record: any) => {
         return (
           <Row>
@@ -239,7 +264,7 @@ export default function AppCalendar({}: Props) {
       title: "Action",
       key: "action",
       dataIndex: "action",
-      width: "10%",
+      width: "20%",
       render: (_: any, record: any) => {
         return (
           <Row>
@@ -256,20 +281,25 @@ export default function AppCalendar({}: Props) {
             <Col span={8}>
               <DeleteOutlined
                 onClick={() => {
-                  userAPI
-                    .deleteUser(record.user.id)
-                    .then(() => {
+                  console.log(record?.id);
+                  delete_scheduleTask.mutate(record?.id, {
+                    onSuccess: () => {
+                      if (!scheduleData) return;
                       openNotification({
                         type: "success",
-                        title: "Delete completed",
+                        title: "delete success",
                       });
-                    })
-                    .catch((res) => {
-                      openNotification({
-                        type: "error",
-                        title: `${res.message}`,
+
+                      queryClient.invalidateQueries({
+                        queryKey: "get-schedule",
                       });
-                    });
+
+                      handleOk();
+                    },
+                    onError: (err) => {
+                      openNotification({ type: "error", title: `${err}` });
+                    },
+                  });
                 }}
               />
             </Col>
@@ -279,18 +309,19 @@ export default function AppCalendar({}: Props) {
     },
   ];
 
-  const onExcel = () => {};
+  const ModalHeadProps = {
+    title: "Table User",
+  };
+
+  const onAdd = () => setAddOpen(true);
+
+  const confirm = () => {
+    modalForm.submit();
+  };
 
   React.useEffect(() => {
-    (async () => {
-      try {
-        const resSchedule = await scheduleAPI.getSchedule();
-        setSchedule(resSchedule);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+    setAddOpen(false);
+  }, [isModalOpen]);
 
   return (
     <>
@@ -320,45 +351,100 @@ export default function AppCalendar({}: Props) {
             cellRender={cellRender}
           />
           <Modal
-            title={changeModal ? "Table User" : "Input User"}
-            style={{
-              top: -80,
-            }}
-            width={changeModal ? "80%" : "30%"}
+            style={
+              {
+                // top: -100,
+              }
+            }
+            width={changeModal ? "60%" : "30%"}
             centered
             open={isModalOpen}
-            onOk={handleOk}
+            onOk={() =>
+              changeModal ? setIsModalOpen(false) : modalForm.submit()
+            }
             onCancel={handleCancel}
           >
             {/* // Create Form */}
             {changeModal ? (
-              <Form>
-                <Table
-                  rowKey="id"
-                  dataSource={select}
-                  columns={columnModal}
-                  scroll={{ y: 900 }}
-                  pagination={false}
+              <React.Fragment>
+                <HeadTitle
+                  className="my-10"
+                  {...ModalHeadProps}
+                  onAdd={onAddOpen ? confirm : onAdd}
+                  actionName={
+                    <Space align="center" size={10}>
+                      <UserAddOutlined
+                        style={{
+                          fontSize: 15,
+                        }}
+                      />
+                      <Typography.Title
+                        level={5}
+                        style={{ margin: 0, color: "white" }}
+                      >
+                        {onAddOpen ? "Submit" : "Add User"}
+                      </Typography.Title>
+                    </Space>
+                  }
                 />
-              </Form>
+
+                <Form form={modalForm} onFinish={onFinishModal}>
+                  <Row>
+                    <Col span={24}>
+                      {onAddOpen ? (
+                        <Form.Item name="user">
+                          <Select
+                            size="large"
+                            mode="multiple"
+                            allowClear
+                            placeholder="Please select"
+                            options={options}
+                          />
+                        </Form.Item>
+                      ) : (
+                        ""
+                      )}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24}>
+                      <Table
+                        rowKey="id"
+                        rowSelection={rowSelection}
+                        dataSource={select}
+                        columns={columnModal}
+                        scroll={{ y: 400 }}
+                        pagination={false}
+                        bordered
+                      />
+                    </Col>
+                  </Row>
+                </Form>
+              </React.Fragment>
             ) : (
-              <Form
-                onFinish={onFinish}
-                form={modalForm}
-                style={{
-                  height: 200,
-                }}
-              >
-                <Form.Item name="user">
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Please select"
-                    onChange={handleChange}
-                    options={options}
-                  />
-                </Form.Item>
-              </Form>
+              <React.Fragment>
+                <Form
+                  onFinish={onFinishModal}
+                  form={modalForm}
+                  style={{
+                    height: 250,
+                  }}
+                >
+                  <Form.Item
+                    name="user"
+                    style={{
+                      marginTop: 25,
+                    }}
+                  >
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      placeholder="Please select"
+                      options={options}
+                    />
+                  </Form.Item>
+                </Form>
+              </React.Fragment>
             )}
           </Modal>
         </Col>

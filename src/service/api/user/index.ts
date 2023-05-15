@@ -5,12 +5,13 @@ import {
   IUser,
   IUserGetAll,
   IUserPost,
+  IUserUpdate,
   IUserUpdatePassword,
 } from "./user-interface";
 const statusSuccess = [200, 201];
 
 export async function getAllUser(params: any) {
-  const res = await axios.get(`${endpoints.user.getAll}`);
+  const res = await axios.get(`${endpoints.user.getAll}`, params);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
@@ -52,7 +53,10 @@ export async function createUser(params?: Omit<IUserPost, "id">) {
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
-export async function updateUser(params?: Omit<IUser, "id">, id?: number) {
+export async function updateUser(
+  params?: Omit<IUserUpdate, "id">,
+  id?: number
+) {
   const res = await axios.patch(`${endpoints.user.update}/${id}`, params);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }

@@ -1,8 +1,8 @@
 import axios, { throwResponse } from "../../../config/axios/axios.config";
 import { useMutation, UseMutationResult } from "react-query";
 import endpoints from "../api.endpoints";
-import { ISchedulePost } from "./schedule-interface";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { IScheduleGetAll, ISchedulePost } from "./schedule-interface";
+import { useQuery, UseQueryResult } from "react-query";
 
 const statusSuccess = [200, 201];
 
@@ -23,7 +23,9 @@ export async function getSchedule() {
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
-export const useGetSchedule = (params?: any): UseQueryResult<any> => {
+export const useGetSchedule = (
+  params?: any
+): UseQueryResult<Array<IScheduleGetAll>> => {
   return useQuery(["get-schedule", params], async () => {
     const res = await axios.get(`${endpoints.schedule.findAll}`, {
       params: { ...params },
@@ -33,7 +35,24 @@ export const useGetSchedule = (params?: any): UseQueryResult<any> => {
 };
 
 export async function getScheduleById(date?: string) {
-  const res = await axios.get(`${endpoints.schedule.select}${date}`);
+  const res = await axios.get(`${endpoints.schedule.select}/${date}`);
+  return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
+}
+
+export async function scheduleDeleteTask(id?: number) {
+  const res = await axios.delete(`${endpoints.schedule.delete}/${id}`);
+  return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
+}
+
+export const useScheduleDeleteTaskById = (id?: number): UseMutationResult => {
+  return useMutation(["delete-scheduleTask"], async (id?: any) => {
+    const res = await axios.delete(`${endpoints.schedule.delete}/${id}`);
+    return !statusSuccess.includes(res?.status) ? throwResponse(res) : res.data;
+  });
+};
+
+export async function updateScheduleById(params?: any, id?: number) {
+  const res = await axios.patch(`${endpoints.schedule.update}/${id}`, params);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
@@ -53,6 +72,9 @@ export const scheduleAPI = {
   exportExcelSchedule,
   useCreateSchedule,
   useGetSchedule,
+  scheduleDeleteTask,
+  updateScheduleById,
+  useScheduleDeleteTaskById,
 };
 
 export default scheduleAPI;

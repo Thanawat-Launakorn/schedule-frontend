@@ -20,14 +20,11 @@ import {
   PlusOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import { CSSProperties } from "@ant-design/cssinjs/lib/hooks/useStyleRegister";
-import authAPI from "../../service/api/auth";
-import { openNotification } from "../notifications";
 import { IProfile } from "../../service/api/auth/auth-interface";
 import GetPosition from "../../utils/position";
 import Container from "../container";
-import TextArea from "antd/es/input/TextArea";
-import userAPI from "../../service/api/user";
+import authAPI from "../../service/api/auth";
+import positionAPI from "../../service/api/position";
 
 type Props = {
   collapsed: boolean;
@@ -37,25 +34,31 @@ type Props = {
 export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const navigate = useNavigate();
   const [modalProfile] = Form.useForm();
+  const { data: getProfile } = authAPI.UseGetProfile();
+  const { data: getAllPosition } = positionAPI.useGetAllPosition();
   const [getData, setData] = React.useState({} as Partial<IProfile>);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [editPass, setEditpass] = React.useState(false);
-  const [updatePass, setPass] = React.useState();
+
   const {
     token: { colorTextLabel, colorPrimary },
   } = theme.useToken();
 
   const showModal = () => {
+    if (!getData) return;
+    modalProfile.setFieldsValue({
+      firstname: getData.firstName,
+      lastname: getData.lastName,
+      position: getAllPosition
+        ?.filter((e) => e.id === getData.positionId)
+        .map((e) => e.position)
+        .join(),
+      ...getData,
+    });
     setIsModalOpen(true);
   };
 
-  const handleOk = async () => {
-    modalProfile.submit();
-    // setTimeout(() => {
-    //   setIsModalOpen(false);
-    // }, 1000);
-    setEditpass(false);
-  };
+  const handleOk = async () => {};
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -67,36 +70,11 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
     navigate("/login");
     window.location.reload();
   };
-  console.log(getData?.id);
-
-  const getProfile = async () => {
-    await authAPI
-      .getProfile()
-      .then((res: IProfile) => {
-        setData({
-          ...res,
-          firstName: res.name.split(" ")[0],
-          lastName: res.name.split(" ")[1],
-        });
-      })
-      .catch((err) => alert(err));
-  };
-
-  const initialData = () => {
-    if (!getData) return;
-    modalProfile.setFieldsValue({
-      firstname: getData.firstName,
-      lastname: getData.lastName,
-      email: getData.email,
-      tel: getData.tel,
-      position: `${GetPosition(getData.positionId)}`,
-    });
-  };
 
   const onFinishModal = (values: any) => {
-    // console.log(values);
-    const id = getData.id;
-    // userAPI.updateUser(values, id);
+    console.log(values);
+    setEditpass(false);
+    setIsModalOpen(false);
   };
 
   const titleStyle = {
@@ -126,9 +104,16 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   ];
 
   React.useEffect(() => {
-    getProfile();
-    initialData();
-  }, []);
+    (async () => {
+      const res = await authAPI.getProfile().then((res) => {
+        setData({
+          ...res,
+          firstName: res.name.split(" ")[0],
+          lastName: res.name.split(" ")[1],
+        });
+      });
+    })();
+  }, [isModalOpen]);
 
   return (
     <Layout.Header
@@ -137,13 +122,13 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
     >
       <Modal
         centered
-        style={{ top: -10 }}
+        style={{ top: -30 }}
         width="60%"
         title="Profile"
         okText="Save Changes"
         cancelText="Cancel"
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={() => modalProfile.submit()}
         onCancel={handleCancel}
         closeIcon={<CloseCircleOutlined />}
       >
@@ -291,69 +276,9 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                                   <Input.Password placeholder="Newpassword"></Input.Password>
                                 </Form.Item>
                               </Col>
-                              {/* <Col>
-                                <Form.Item>
-                                  <Button
-                                    htmlType="submit"
-                                    onClick={handleEditpass}
-                                    type="primary"
-                                  >
-                                    Submit
-                                  </Button>
-                                </Form.Item>
-                              </Col> */}
                             </Row>
                           </>
                         )}
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
-              </Row>
-            </Col>
-
-            <Col span={24}>
-              <Row gutter={[12, 12]}>
-                <Col span={8}>
-                  {/* Social */}
-                  <Container>
-                    <Row gutter={[12, 12]}>
-                      <Col span={24}>
-                        <Row justify="space-between" align="middle">
-                          <Typography.Title level={5}>Social</Typography.Title>
-                          <PlusOutlined
-                            className="cursor-pointer"
-                            onClick={showModal}
-                          />
-                          {/* <Modal
-                            title="Socials"
-                            open={isModalOpen}
-                            onOk={handleOk}
-                            onCancel={handleCancel}
-                          >
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                          </Modal> */}
-                        </Row>
-                        <Divider style={{ margin: "5px 0" }} />
-                      </Col>
-                      <Col span={24}></Col>
-                    </Row>
-                  </Container>
-                </Col>
-                <Col span={16}>
-                  {/* About me */}
-                  <Container>
-                    <Row gutter={[12, 12]}>
-                      <Col span={24}>
-                        <Typography.Title level={5}>About me</Typography.Title>
-                        <Divider style={{ margin: "5px 0" }} />
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item>
-                          <TextArea placeholder="about me..." rows={4} />
-                        </Form.Item>
                       </Col>
                     </Row>
                   </Container>
@@ -366,13 +291,14 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
       <Row justify="space-between" align="middle" style={{ height: "100%" }}>
         <Col>
           <Button
-            type="text"
+            type="link"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: 20,
               width: 64,
               height: "100%",
+              color: "#001529",
             }}
           />
         </Col>

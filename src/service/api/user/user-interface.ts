@@ -6,6 +6,7 @@ export interface IUserPost {
   img?: string;
   tel: string;
   position?: number;
+  positionId?: number;
   firstname?: string;
   lastname?: string;
 }
@@ -53,6 +54,19 @@ export interface IUser {
   UpdateAt?: string;
   schedule?: any[];
   position?: Position;
+}
+
+export interface IUserUpdate {
+  id?: number;
+  name: string;
+  email: string;
+  password?: string;
+  img?: string;
+  tel: string;
+  position?: number;
+  createAt?: string;
+  deleteAt?: null;
+  UpdateAt?: string;
 }
 
 export interface Position {

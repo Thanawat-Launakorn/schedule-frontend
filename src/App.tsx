@@ -7,10 +7,12 @@ import "./assets/css/global.css";
 import "./assets/scss/index.scss";
 import { StyleProvider } from "@ant-design/cssinjs";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ScrollTopProvider } from "./provider/scrollTop/scrollTop.Provider";
 const AppRoute = () => {
   const appRoute = useRoutes(routes);
   return appRoute;
 };
+
 const client = new QueryClient({
   defaultOptions: {
     queries: { refetchOnWindowFocus: false, retry: 0 },
@@ -30,7 +32,9 @@ function App() {
         >
           <StyleProvider hashPriority="high">
             <AuthProvider>
-              <AppRoute />
+              <ScrollTopProvider>
+                <AppRoute />
+              </ScrollTopProvider>
             </AuthProvider>
           </StyleProvider>
         </ConfigProvider>
