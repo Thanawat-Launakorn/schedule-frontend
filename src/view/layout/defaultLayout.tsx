@@ -5,7 +5,6 @@ import AppHeader from "../../components/header";
 import AppContent from "../../components/content";
 
 import { Outlet } from "react-router-dom";
-import authAPI from "../../service/api/auth";
 
 type Props = {};
 

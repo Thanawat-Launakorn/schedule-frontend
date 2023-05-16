@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Divider, Form, Input, MenuProps, Select, theme } from "antd";
-import images1 from "../../assets/images/images1.png";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -43,6 +42,7 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const {
     token: { colorTextLabel, colorPrimary },
   } = theme.useToken();
+  console.log(getData);
 
   const showModal = () => {
     if (!getData) return;
@@ -373,7 +373,10 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
                         margin: 0,
                       }}
                     >
-                      {`${GetPosition(getData.positionId)}`}
+                      {getAllPosition
+                        ?.filter((e) => getData.positionId === e.id)
+                        .map((e) => e.position)
+                        .join()}
                     </Typography.Title>
                   </Col>
                   <Col>

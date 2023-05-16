@@ -155,7 +155,7 @@ export default function ListUser({}: Props) {
             title="Table Role"
             id=""
             columns={columnPosition}
-            data={[]}
+            data={userData}
             onEdit={handleClickEditUser}
           />
         ),

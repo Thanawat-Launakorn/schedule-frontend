@@ -24,6 +24,7 @@ import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
 import positionAPI from "../../service/api/position";
+import { IPosition } from "../../service/api/position/position-interface";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -94,6 +95,8 @@ export default function FCreateUser({ onAny, disabled }: Props) {
   };
 
   const onFinish = (values: IUserPost) => {
+    console.log(values);
+
     userAPI
       .createUser({
         email: values.email,

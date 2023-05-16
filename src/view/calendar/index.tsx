@@ -19,7 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
 import userAPI from "../../service/api/user";
 import { IUser, IUserColumnType } from "../../service/api/user/user-interface";
-import scheduleAPI from "../../service/api/schedule";
+import scheduleAPI, { getSchedule } from "../../service/api/schedule";
 import { openNotification } from "../../components/notifications";
 import { useNavigate } from "react-router-dom";
 import type { CellRenderInfo } from "rc-picker/lib/interface";
@@ -27,6 +27,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   UserAddOutlined,
+  CloudUploadOutlined,
 } from "@ant-design/icons";
 import { IScheduleGetAll } from "../../service/api/schedule/schedule-interface";
 import Table, { ColumnsType } from "antd/es/table";
@@ -321,27 +322,32 @@ export default function AppCalendar({}: Props) {
 
   React.useEffect(() => {
     setAddOpen(false);
-  }, [isModalOpen]);
+  }, [isModalOpen, scheduleData]);
 
   return (
     <>
       <Row>
-        <Col>
+        <Col span={24}>
           <HeadTitle
             {...HeadTitleProps}
             actionName={
-              <Space>
-                <Row align="middle" justify="space-between">
-                  <Col>
-                    <CloudUploadOutlined className="text-lg" />
-                  </Col>
-                  <Col>
-                    <Typography.Title level={5}>Import</Typography.Title>
-                  </Col>
-                </Row>
-              </Space>
+              <Row align="middle" justify="space-between">
+                <Col>
+                  <CloudUploadOutlined className="text-lg" />
+                </Col>
+                <Col>
+                  <Typography.Title
+                    level={5}
+                    style={{
+                      margin: 0,
+                    }}
+                  >
+                    Export
+                  </Typography.Title>
+                </Col>
+              </Row>
             }
-            onExcel={onExcel}
+            onExcel={() => {}}
           />
         </Col>
         <Col>
@@ -351,11 +357,7 @@ export default function AppCalendar({}: Props) {
             cellRender={cellRender}
           />
           <Modal
-            style={
-              {
-                // top: -100,
-              }
-            }
+            style={{}}
             width={changeModal ? "60%" : "30%"}
             centered
             open={isModalOpen}

@@ -111,8 +111,8 @@ export default function FEditUser({ onAny, disabled }: Props) {
         Number(id)
       )
       .then(() => {
-        openNotification({ type: "success", title: "success" });
-        window.location.reload();
+        // openNotification({ type: "success", title: "success" });
+        // window.location.reload();
       })
       .catch(() => {
         openNotification({ type: "error", title: "error" });

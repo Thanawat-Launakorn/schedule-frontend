@@ -92,7 +92,9 @@ export default function TableLayout({
           style={{ margin: 0, marginBottom: 20 }}
         >
           <Col span={12}>
-            <Typography.Title level={5}>{title}</Typography.Title>
+            <Typography.Title level={5} style={{ margin: 0 }}>
+              {title}
+            </Typography.Title>
           </Col>
           {title === "Table User" && (
             <Col span={12} className="text-end">
