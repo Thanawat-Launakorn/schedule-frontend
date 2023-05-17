@@ -5,7 +5,7 @@ import { IUser } from "../user/user-interface";
 import { IProfile } from "../auth/auth-interface";
 const statusSuccess = [200, 201];
 
-export async function signin(params?: IUser) {
+export async function signin(params?: Partial<IUser>) {
   const res = await axios.post(`${endpoints.auth.signin}`, params);
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }

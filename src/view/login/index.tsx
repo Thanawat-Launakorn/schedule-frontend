@@ -5,10 +5,14 @@ import authAPI from "../../service/api/auth";
 import { useNavigate } from "react-router-dom";
 import { openNotification } from "../../components/notifications";
 import calendar from "../../assets/images/calendar.png";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 type Props = {};
 
 export default function Signin({}: Props) {
   const navigate = useNavigate();
+  const [userFocus, setUserFocus] = React.useState<boolean>(false);
+  const [passFocus, setPassFocus] = React.useState<boolean>(false);
+
   const onFinish = (value: ISignin) => {
     authAPI
       .signin({
@@ -62,14 +66,16 @@ export default function Signin({}: Props) {
                 message: "Please input your username!",
               },
             ]}
+            className="input-signin"
           >
-            <Input placeholder="Email" />
+            <Input placeholder="Email" prefix={<UserOutlined />} />
           </Form.Item>
           <Form.Item
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
+            className="input-signin"
           >
-            <Input.Password placeholder="Password" />
+            <Input.Password placeholder="Password" prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="w-full">

@@ -17,6 +17,8 @@ import {
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
+import { initParams } from "../../config/axios/axios-interface";
+import userAPI, { getAllUser } from "../../service/api/user";
 import { IUser } from "../../service/api/user/user-interface";
 import exportExcel from "../../utils/excel";
 
@@ -45,11 +47,12 @@ export default function TableLayout({
   onChange,
   pagination,
 }: Props) {
+  const { data: getAllUser } = userAPI.useGetAllUser(initParams);
   const columnBtnAction: ColumnsType<object> = [
     {
       title: "Action",
       key: "action",
-      width: "1%",
+      width: "5%",
       align: "center",
       render: (_, record) => (
         <Space size="middle">
@@ -131,6 +134,11 @@ export default function TableLayout({
           columns={columnMap}
           dataSource={data || []}
           onChange={onChange}
+          pagination={{
+            current: getAllUser?.page || 1,
+            pageSize: getAllUser?.limit,
+            total: getAllUser?.count || 0,
+          }}
         />
       </Col>
     </Row>

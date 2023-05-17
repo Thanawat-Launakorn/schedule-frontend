@@ -8,10 +8,11 @@ export default function FormSearchRole({}: Props) {
   return (
     <React.Fragment>
       <Col md={6}>
-        <Form.Item label="Position" name="id">
+        <Form.Item label="Position" name="position">
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search Position"
+            size="large"
           />
         </Form.Item>
       </Col>

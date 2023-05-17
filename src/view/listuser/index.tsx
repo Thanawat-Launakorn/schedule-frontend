@@ -21,7 +21,7 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Tab from "../../components/tab";
-import type { ColumnsType } from "antd/es/table";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { IItemsTabLayout } from "../../components/tab/tab-interface";
 import FormSearchUser from "../../components/form/search-user";
 import TableLayout from "../../components/table";
@@ -30,30 +30,41 @@ import { columnsP, columnsU } from "../../components/table/columns-interface";
 import FormSearchRole from "../../components/form/search-position";
 import HeadTitle from "../../components/headtitle";
 import { openNotification } from "../../components/notifications";
-import { useForm } from "antd/es/form/Form";
-import scheduleAPI from "../../service/api/schedule";
-import exportExcel from "../../utils/excel";
-
+import {} from "react-query";
 import Table, { ColumnType } from "antd/es/table";
-import userAPI from "../../service/api/user";
+import userAPI, { useGetAllUser } from "../../service/api/user";
+import { initParams, IPagination } from "../../config/axios/axios-interface";
+import { useForm } from "antd/es/form/Form";
+import { MAX_VERTICAL_CONTENT_RADIUS } from "antd/es/style/placementArrow";
 type Props = {};
+
 export default function ListUser({}: Props) {
-  // const [form] = useForm();
   const [selectTabs, setSelectTabs] = React.useState<String>("1");
   const navigate = useNavigate();
-  const [userData, setData] = React.useState<Array<IUser>>([]);
-  const [params, setParams] = React.useState<Array<IUser>>([]);
-  const [showWarningModal, setShowWarningModal] =
-    React.useState<boolean>(false);
+  const [params, setParams] = React.useState<any>(initParams);
+  const { data: getAllUser, isLoading: loadingAllUser } =
+    userAPI.useGetAllUser(params);
 
+  const [searchForm] = useForm();
   const handleOnSearch = (values: any) => {
-    console.log("Success:", values);
-    setParams(values);
+    setParams({
+      ...initParams,
+      name: values.name || "",
+      email: values.email || "",
+      position: values.position || "",
+      pagination: true,
+    });
   };
 
-  console.log(params);
-
-  const handleOnCancelSearch = () => {};
+  const handleOnCancelSearch = () => {
+    searchForm.setFieldsValue({
+      name: "",
+      email: "",
+      phone: "",
+      status: "",
+      position: "",
+    });
+  };
 
   const handleOnTabChange = (activeKey: string) => {
     setSelectTabs(activeKey);
@@ -66,15 +77,14 @@ export default function ListUser({}: Props) {
   };
 
   const handleClickDeleteUser = async (record: object) => {
-    // const data = record as IUser;
-    // try {
-    //   // await userAPI.deleteUser(Number(data.id));
-    // } catch (err) {
-    // } finally {
-    //   window.location.reload();
-    // }
-
     showDeleteConfirm(record);
+  };
+
+  const handlePagination = (pagenition: TablePaginationConfig) => {
+    setParams({
+      page: pagenition.current,
+      limit: pagenition.pageSize,
+    });
   };
 
   const showDeleteConfirm = (user: any) => {
@@ -131,11 +141,13 @@ export default function ListUser({}: Props) {
         table: (
           <TableLayout
             title="Table User"
-            id=""
+            loading={loadingAllUser}
+            id={"id"}
             columns={columnUser}
-            data={userData}
+            data={getAllUser?.data}
             onEdit={handleClickEditUser}
             onDelete={handleClickDeleteUser}
+            onChange={handlePagination}
           />
         ),
       },
@@ -155,8 +167,9 @@ export default function ListUser({}: Props) {
             title="Table Role"
             id=""
             columns={columnPosition}
-            data={userData}
+            data={getAllUser?.data}
             onEdit={handleClickEditUser}
+            onChange={handlePagination}
           />
         ),
       },
@@ -175,13 +188,7 @@ export default function ListUser({}: Props) {
     }
   };
 
-  React.useEffect(() => {
-    (async () => {
-      const res = await userAPI.getAllUser(params);
-
-      setData(res.data);
-    })();
-  }, [params]);
+  React.useEffect(() => {});
 
   return (
     <React.Fragment>
@@ -211,7 +218,11 @@ export default function ListUser({}: Props) {
         </Col>
 
         <Col span={24}>
-          <Tab items={items} onChange={handleOnTabChange} />
+          <Tab
+            items={items}
+            onChange={handleOnTabChange}
+            searchForm={searchForm}
+          />
         </Col>
       </Row>
     </React.Fragment>

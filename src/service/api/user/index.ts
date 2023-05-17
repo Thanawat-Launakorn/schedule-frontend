@@ -3,7 +3,7 @@ import axios, { throwResponse } from "../../../config/axios/axios.config";
 import endpoints from "../api.endpoints";
 import {
   IUser,
-  IUserGetAll,
+  IUserResult,
   IUserPost,
   IUserUpdate,
   IUserUpdatePassword,
@@ -15,7 +15,9 @@ export async function getAllUser(params: any) {
   return !statusSuccess.includes(res.status) ? throwResponse(res) : res.data;
 }
 
-export const useGetAllUser = (params?: IUser): UseQueryResult<IUserGetAll> => {
+export const useGetAllUser = (
+  params?: Partial<IUser>
+): UseQueryResult<IUserResult, Error> => {
   return useQuery(["get-all-user", params], async () => {
     const res = await axios.get(`${endpoints.user.getAll}`, {
       params: { ...params },

@@ -12,6 +12,7 @@ import {
   Typography,
   Popover,
   Divider,
+  Input,
 } from "antd";
 import type { TableRowSelection } from "antd/es/table/interface";
 import dayjs, { Dayjs } from "dayjs";
@@ -43,7 +44,7 @@ export default function AppCalendar({}: Props) {
   const navigate = useNavigate();
   const { data: scheduleData } = scheduleAPI.useGetSchedule();
   const { data: userData } = userAPI.useGetAllUser();
-
+  const [openEdit, setOpenEdit] = React.useState<boolean>(false);
   const [changeModal, setChangeModal] = React.useState(false);
   const [select, setSelect] = React.useState<Array<any>>([]);
   const [date, setDate] = React.useState<string>("");
@@ -248,14 +249,42 @@ export default function AppCalendar({}: Props) {
     },
 
     {
-      title: "Position",
-      key: "position",
-      dataIndex: "position",
-      width: "30%",
+      title: "Dopay",
+      key: "dopay",
+      dataIndex: "doPay",
+      width: "20%",
       render: (_: any, record: any) => {
         return (
           <Row>
-            <div>{`${GetPosition(record.user.positionId)}`}</div>
+            <Col span={24}>
+              <Select
+                disabled={!openEdit}
+                defaultValue={record.dopay}
+                options={[
+                  { value: "Do", label: "Do" },
+                  { value: "Pay", label: "Pay" },
+                ]}
+                style={{
+                  width: "100%",
+                }}
+              />
+            </Col>
+          </Row>
+        );
+      },
+    },
+    {
+      title: "Amount",
+      key: "amount",
+      dataIndex: "amount",
+      width: "30%",
+
+      render: (_: any, record: any) => {
+        return (
+          <Row>
+            <Col span={24}>
+              <Input min={0} type={"number"} readOnly={!openEdit} />
+            </Col>
           </Row>
         );
       },
@@ -266,20 +295,11 @@ export default function AppCalendar({}: Props) {
       key: "action",
       dataIndex: "action",
       width: "20%",
+      align: "center",
       render: (_: any, record: any) => {
         return (
           <Row>
-            <Col span={8}>
-              <EditOutlined
-                onClick={() => {
-                  navigate(`/user-management/edit/${record.user.id}`);
-                }}
-              />
-            </Col>
-            <Col span={8}>
-              <Divider type="vertical" />
-            </Col>
-            <Col span={8}>
+            <Col span={24}>
               <DeleteOutlined
                 onClick={() => {
                   console.log(record?.id);
@@ -322,6 +342,7 @@ export default function AppCalendar({}: Props) {
 
   React.useEffect(() => {
     setAddOpen(false);
+    setOpenEdit(false);
   }, [isModalOpen, scheduleData]);
 
   return (
@@ -358,11 +379,14 @@ export default function AppCalendar({}: Props) {
           />
           <Modal
             style={{}}
-            width={changeModal ? "60%" : "30%"}
+            width={changeModal ? "70%" : "30%"}
             centered
+            okText={changeModal ? "Edit" : "Ok"}
             open={isModalOpen}
             onOk={() =>
-              changeModal ? setIsModalOpen(false) : modalForm.submit()
+              changeModal
+                ? setOpenEdit((prevState) => !prevState)
+                : modalForm.submit()
             }
             onCancel={handleCancel}
           >

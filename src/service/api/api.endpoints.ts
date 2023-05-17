@@ -7,7 +7,7 @@ export const endpoints = {
   },
   user: {
     create: `${projectConfig.baseURL}/user/create`,
-    getAll: `${projectConfig.baseURL}/user/getAll?name=`,
+    getAll: `${projectConfig.baseURL}/user/getAll`,
     getOne: `${projectConfig.baseURL}/user/getOne`,
     update: `${projectConfig.baseURL}/user/update`,
     updatepassword: `${projectConfig.baseURL}/user/update-password`,

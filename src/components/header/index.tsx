@@ -42,7 +42,6 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   const {
     token: { colorTextLabel, colorPrimary },
   } = theme.useToken();
-  console.log(getData);
 
   const showModal = () => {
     if (!getData) return;
@@ -72,7 +71,6 @@ export default function AppHeader({ collapsed, setCollapsed }: Props) {
   };
 
   const onFinishModal = (values: any) => {
-    console.log(values);
     setEditpass(false);
     setIsModalOpen(false);
   };

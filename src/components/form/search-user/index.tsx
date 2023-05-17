@@ -12,6 +12,7 @@ export default function FormSearchUser({}: Props) {
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search name"
+            size="large"
           />
         </Form.Item>
       </Col>
@@ -20,6 +21,7 @@ export default function FormSearchUser({}: Props) {
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search email"
+            size="large"
           />
         </Form.Item>
       </Col>
@@ -29,6 +31,7 @@ export default function FormSearchUser({}: Props) {
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search telephone"
+            size="large"
           />
         </Form.Item>
       </Col>
@@ -37,6 +40,7 @@ export default function FormSearchUser({}: Props) {
           <Input
             prefix={<img className="img-input-icons" src={IconSearch} />}
             placeholder="Search status"
+            size="large"
           />
         </Form.Item>
       </Col>

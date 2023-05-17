@@ -1,19 +1,25 @@
 import React from "react";
 import { IItemsTabLayout, ISearch } from "./tab-interface";
-import { Button, Col, Form, Row, Tabs, TabsProps } from "antd";
+import { Button, Col, Form, FormInstance, Row, Tabs, TabsProps } from "antd";
 import Container from "../container";
 import "./tab-layout.css";
+import { searchUser } from "../../service/api/user";
 type Props = {
   items: IItemsTabLayout[];
   onChange: (value: string) => void;
+  searchForm: FormInstance;
 };
 
-export default function TabLayout({ items, onChange }: Props) {
+export default function TabLayout({ searchForm, items, onChange }: Props) {
   const tabItems: TabsProps["items"] = items.map((item, _index) => ({
     label: item.label,
     key: item.key,
     children: (
-      <Layout search={item.children.search} table={item.children.table} />
+      <Layout
+        search={item.children.search}
+        table={item.children.table}
+        form={searchForm}
+      />
     ),
   }));
   return (
@@ -38,8 +44,9 @@ export default function TabLayout({ items, onChange }: Props) {
 interface ILayout {
   search: ISearch;
   table: React.ReactElement;
+  form?: FormInstance;
 }
-const Layout = ({ search, table }: ILayout) => {
+const Layout = ({ search, table, form }: ILayout) => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
@@ -52,6 +59,7 @@ const Layout = ({ search, table }: ILayout) => {
               name="search"
               onFinish={search.onFinish}
               onFinishFailed={onFinishFailed}
+              form={form}
               autoComplete="off"
               layout="vertical"
             >

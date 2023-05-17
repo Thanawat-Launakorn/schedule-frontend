@@ -26,7 +26,10 @@ import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import { openNotification } from "../../components/notifications";
 import { fileToDataUrl } from "../../utils/media";
 import imageProfile from "../../assets/images/image-profile.jpeg";
-import positionAPI, { useGetAllPosition } from "../../service/api/position";
+import positionAPI, {
+  getAllPosition,
+  useGetAllPosition,
+} from "../../service/api/position";
 type Props = {
   onAny?: (value: IUser) => void;
   disabled?: boolean;
@@ -45,6 +48,7 @@ export default function FEditUser({ onAny, disabled }: Props) {
   const { data: allPosition } = useGetAllPosition();
   const [statusUpload, setStatusUpload] = React.useState(true);
   const [imageUrl, setImageUrl] = React.useState<string>();
+  console.log(allPosition?.map((e) => e));
 
   const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
@@ -97,8 +101,6 @@ export default function FEditUser({ onAny, disabled }: Props) {
   };
 
   const onFinish = (values: IUserPost) => {
-    console.log(values);
-
     userAPI
       .updateUser(
         {
@@ -106,7 +108,13 @@ export default function FEditUser({ onAny, disabled }: Props) {
           name: `${values.firstname} ${values.lastname}`,
           img: imageUrl,
           tel: values.tel,
-          position: values.position,
+          position:
+            typeof values.position === "string"
+              ? allPosition
+                  ?.filter((e: any) => e.position === values.position)
+                  .map((e) => e.id)
+                  .join()
+              : values.position,
         },
         Number(id)
       )
@@ -129,7 +137,8 @@ export default function FEditUser({ onAny, disabled }: Props) {
       lastname: userDataById.name.split(" ")[1],
       position: allPosition
         ?.filter((e) => e.id === userDataById?.positionId)
-        .map((e) => e.position),
+        .map((e) => e.position)
+        .join(),
     });
   };
 
